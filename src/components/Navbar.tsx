@@ -17,10 +17,10 @@ function Navbar({ className }: { className?: string }) {
         <Link href={"#services"}>
             <MenuItem setActive={setActive} active={active} item="Services"></MenuItem>
         </Link>
-        <Link href={"#"}>
-            <MenuItem setActive={setActive} active={active} item="Blog"></MenuItem>
+        <Link href={"#info"}>
+            <MenuItem setActive={setActive} active={active} item="Info"></MenuItem>
         </Link>
-        <Link href={"#"}>
+        <Link href={"#about"}>
             <MenuItem setActive={setActive} active={active} item="About"></MenuItem>
         </Link>
         
