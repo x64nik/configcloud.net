@@ -1,0 +1,34 @@
+{
+    "services": [
+        {
+            "title": "Virtual Machines",
+            "description": "Deploy scalable and customizable virtual machines to run any workload, with options for various operating systems, CPU, and memory configurations.",
+            "link": "/vm"
+        },
+        {
+            "title": "Docker Containers",
+            "description": "Effortlessly manage and deploy containerized applications with Docker, ensuring lightweight, consistent, and fast environments for your projects.",
+            "link": "/docker"
+        },
+        {
+            "title": "Managed Databases",
+            "description": "Reliable, high-performance managed databases for seamless data storage and access, with automated backups, scaling, and security.",
+            "link": "/db"
+        },
+        {
+            "title": "GitLab/GitHub Runners",
+            "description": "Dedicated runners for GitLab and GitHub CI/CD pipelines, enabling efficient and customizable automation for building, testing, and deploying your code.",
+            "link": "/runners"
+        },
+        {
+            "title": "Bare Metal with Proxmox",
+            "description": "Access powerful bare-metal servers with a dedicated Proxmox dashboard, providing full control over hardware resources for intensive, customizable workloads.",
+            "link": "/bare-metal"
+        },
+        {
+            "title": "LLM APIs",
+            "description": "Leverage cutting-edge Large Language Model (LLM) APIs, featuring Ollama and other self-hosted LLMs, to integrate advanced AI capabilities into your applications securely and efficiently.",
+            "link": "/llms"
+        }
+    ]
+}
