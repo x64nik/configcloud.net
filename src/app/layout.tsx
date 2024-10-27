@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Navbar from "@/components/LandingPage/Navbar";
 
+import Navbar from "@/components/LandingPage/Navbar";
+import { Toaster, toast } from 'sonner'
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,6 +34,7 @@ export default function RootLayout({
         {/* <div className="relative w-full flex items-center  justify-center">
         <Navbar/>
         </div> */}
+        <Toaster richColors theme="dark"/>
         {children}
       </body>
     </html>
