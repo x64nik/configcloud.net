@@ -15,7 +15,7 @@ function HeroSection() {
             className="mt-4 font-normal text-base md:text-lg text-neutral-400 max-w-xl mx-auto"
             >The ultimate platform designed specifically for Devlopers. Our mission is to make cloud computing accessible and affordable, enabling students to create and manage their Virtual Machines with ease.</p>
             <div className="mt-4">
-                <Link href={"#"}>
+                <Link href={"/signup"}>
                 <button className=" mt-5 bg-slate-700 no-underline group cursor-pointer relative shadow-2xl shadow-zinc-800 rounded-full p-px text-xs font-normal leading-6  text-white inline-block">
                   <span className="absolute inset-0 overflow-hidden rounded-full">
                     <span className="absolute inset-0 rounded-full bg-[image:radial-gradient(75%_100%_at_50%_0%,rgba(56,189,248,0.6)_0%,rgba(56,189,248,0)_75%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { InfiniteMovingCards } from "./ui/infinite-moving-cards";
-import testimonialData from "../data/testimonials_data.json";
+import { InfiniteMovingCards } from "../ui/infinite-moving-cards";
+import testimonialData from "../../data/testimonials_data.json";
 
 function Testimonials() {
   return (

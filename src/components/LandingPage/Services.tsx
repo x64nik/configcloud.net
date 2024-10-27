@@ -1,7 +1,7 @@
 "use cient";
 import Link from "next/link"
-import serviceData from "../data/services_data.json"
-import { HoverEffect } from "./ui/card-hover-effect";
+import serviceData from "../../data/services_data.json"
+import { HoverEffect } from "../ui/card-hover-effect";
 import { section } from "framer-motion/client";
 
 
