@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect } from "react";
-import axios from "axios";
+import { apiRequest } from '@/api/auth/login'; // Import the API request function
 import { Toaster, toast } from 'sonner'
-import { Label } from "../../components/ui/label";
-import { Input } from "../../components/ui/input";
+import { Label } from "../../../components/ui/label";
+import { Input } from "../../../components/ui/input";
 import { cn } from "@/utils/cn";
 import { FlipWords } from "@/components/ui/flip-words";
 import { Button } from "@/components/ui/button"
@@ -65,18 +65,21 @@ export default function SignupPage() {
         setLoading(true); // Set loading state
 
         try {
-            const response = await axios.post(`http://localhost:5000/auth/signup`, {
-                username: user.username,
-                email: user.email,
-                password: user.password,
+            const response = await apiRequest('/auth/signup', {
+                method: 'POST',
+                data: {
+                    username: user.username,
+                    email: user.email,
+                    password: user.password,
+                }
             });
-            console.log("Signup successful", response.data);
+            console.log("Signup successful", response);
             router.push("/login");
             toast.success("Signup successful!");
             
-        } catch (error: any) {
-            console.log("signup error", error.message);
-            toast.error(error.response?.data?.message || "An error occurred during signup.");
+        } catch (error) {
+            console.log("signup error", error);
+            toast.error(`${error}` || "An error occurred during signup.");
         } finally {
             setLoading(false); // Reset loading state
         }

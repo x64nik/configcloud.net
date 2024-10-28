@@ -1,12 +1,11 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
-import { Label } from "../../components/ui/label";
-import { Input } from "../../components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/utils/cn";
-import { UserRound } from "lucide-react";
 import { Toaster, toast } from 'sonner'
+import { apiRequest } from '@/api/auth/login'; // Import the API request function
 
 export default function LoginPage() {
     const router = useRouter();
@@ -16,25 +15,24 @@ export default function LoginPage() {
       password: "",
     })
 
-    
     const onLogin = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
       try {
-          const response = await axios.post('http://localhost:5000/auth/login', {
-            email: user.email,
-            password: user.password,
-          })
-          console.log("Login Success", response.data);
-          router.push("/dashboard")
-      }catch (error:any) {
-        console.log("Login Failed", error.message);
-        toast.error("Invalid username or password!");
-      } finally{
-        console.log("in final");
-      }
-      
-      };
+          const response = await apiRequest('/auth/login', { 
+            method: 'POST',
+            data: { email: user.email, password: user.password }
+          });
+          console.log("Login Success", response);
+          toast.success("Login Success");
+          router.push("/dashboard");
+        } catch (error) {
+            toast.error(`${error}`);
+        } finally {
+          console.log("in final");
+        }
+              
+    };
     
 
 
