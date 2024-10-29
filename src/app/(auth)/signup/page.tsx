@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import { apiRequest } from '@/api/auth/login'; // Import the API request function
+import { signup } from '@/api/Signup'; // Import the API request function
 import { Toaster, toast } from 'sonner'
 import { Label } from "../../../components/ui/label";
 import { Input } from "../../../components/ui/input";
@@ -65,14 +65,12 @@ export default function SignupPage() {
         setLoading(true); // Set loading state
 
         try {
-            const response = await apiRequest('/auth/signup', {
-                method: 'POST',
-                data: {
-                    username: user.username,
-                    email: user.email,
-                    password: user.password,
-                }
+            const response = await signup({ 
+                username: user.username, 
+                email: user.email, 
+                password: user.password 
             });
+
             console.log("Signup successful", response);
             router.push("/login");
             toast.success("Signup successful!");
@@ -80,6 +78,7 @@ export default function SignupPage() {
         } catch (error) {
             console.log("signup error", error);
             toast.error(`${error}` || "An error occurred during signup.");
+            
         } finally {
             setLoading(false); // Reset loading state
         }

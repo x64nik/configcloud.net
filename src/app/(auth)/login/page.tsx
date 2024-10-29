@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/utils/cn";
 import { Toaster, toast } from 'sonner'
-import { apiRequest } from '@/api/auth/login'; // Import the API request function
+import { login } from '@/api/Login'; // Import the API request function
 
 export default function LoginPage() {
     const router = useRouter();
@@ -19,17 +19,24 @@ export default function LoginPage() {
       e.preventDefault();
 
       try {
-          const response = await apiRequest('/auth/login', { 
-            method: 'POST',
-            data: { email: user.email, password: user.password }
-          });
-          console.log("Login Success", response);
-          toast.success("Login Success");
-          router.push("/dashboard");
-        } catch (error) {
-            toast.error(`${error}`);
+        const response = await login({ 
+          email: user.email, 
+          password: user.password 
+        });
+
+        console.log("Login Success", response);
+        toast.success("Login Success");
+        router.push("/dashboard");
+ 
+      } catch (error) {
+        
+          console.log("Login Failed", error);
+          toast.error(`${error}`);
+        
         } finally {
+          
           console.log("in final");
+        
         }
               
     };
