@@ -27,22 +27,22 @@ const data = {
   navMain: [
     {
       title: "Virtual Machines",
-      url: "#vm",
+      url: "/dashboard/vm",
       icon: SquareTerminal,
     },
     {
       title: "SSH Keys",
-      url: "#sshkeys",
+      url: "/dashboard/sshkeys",
       icon: KeyRound,
     },
     {
       title: "Settings",
-      url: "#settings",
+      url: "/dashboard/settings",
       icon: Settings2,
     },
     {
       title: "Help",
-      url: "#help",
+      url: "/dashboard/help",
       icon: CircleHelp,
     },
   ]
@@ -52,13 +52,26 @@ export function AppSidebar({ user, onLogout, ...props }: {
   user: { name: string; email: string; avatar: string } | null;
   onLogout: () => void;  // Add the logout function as a prop
 } & React.ComponentProps<typeof Sidebar>) {
+
+
+  const [activeItem, setActiveItem] = React.useState<string>("")
+  const handleNavClick = (title: string) => {
+    setActiveItem(title)
+  }
+
+  const updatedNavItems = data.navMain.map(item => ({
+    ...item,
+    isActive: item.title === activeItem
+  }))
+
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="/">
+              <a href="/dashboard">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <Command className="size-4" />
                 </div>
@@ -72,7 +85,7 @@ export function AppSidebar({ user, onLogout, ...props }: {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={updatedNavItems}/>
       </SidebarContent>
       <SidebarFooter>
       {user ? (
