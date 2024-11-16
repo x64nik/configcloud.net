@@ -2,6 +2,7 @@
 
 import { type LucideIcon } from "lucide-react";
 import { usePathname } from "next/navigation"; // Import the hook
+import Link from "next/link"; // Import the Link component
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -42,10 +43,11 @@ export function NavMain({
                   }
                 )}
               >
-                <a href={item.url}>
+                {/* Use Link directly here */}
+                <Link href={item.url} className="flex items-center gap-2">
                   <item.icon />
                   <span>{item.title}</span>
-                </a>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           );
