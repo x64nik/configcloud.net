@@ -26,6 +26,7 @@ export function CreateVMDialog() {
   const [cores, setCores] = useState(1)
   const [memory, setMemory] = useState(2)
   const [disk, setDisk] = useState(8)
+  const [isOpen, setIsOpen] = useState(false) // Manage dialog open state
 
   const handleSubmit = () => {
     console.log("VM Name:", vmName)
@@ -35,12 +36,20 @@ export function CreateVMDialog() {
     console.log("Cores:", cores)
     console.log("Memory:", memory)
     console.log("Disk:", disk)
+
+    // Close the dialog after submitting
+    setIsOpen(false)
   }
 
+  // Check if all required fields are filled
+  const isFormValid = vmName && vmUsername && vmPassword && selectedDistro;
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Create +</Button>
+        <Button variant="outline" onClick={() => setIsOpen(true)}>
+          Create +
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -50,8 +59,8 @@ export function CreateVMDialog() {
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <div className="flex items-center gap-4">
-            <Label htmlFor="vmname" className="w-1/4 text-right">
+          <div className="flex items-center gap-4 ">
+            <Label htmlFor="vmname" className="text-right w-1/6 ">
               VM Name
             </Label>
             <Input 
@@ -62,7 +71,7 @@ export function CreateVMDialog() {
             />
           </div>
           <div className="flex items-center gap-4">
-            <Label htmlFor="vmusername" className="w-1/4 text-right">
+            <Label htmlFor="vmusername" className="text-right w-1/6">
               Username
             </Label>
             <Input 
@@ -73,14 +82,14 @@ export function CreateVMDialog() {
             />
           </div>
           <div className="flex items-center gap-4">
-            <Label htmlFor="vmpassword" className="w-1/4 text-right">
+            <Label htmlFor="vmpassword" className="text-right w-1/6">
               Password
             </Label>
-            <div className="relative flex-1">
+            <div className="relative items-center gap-4">
               <Input
                 id="vmpassword"
                 type={showPassword ? "text" : "password"}
-                className="pr-10"
+                className="pr-4"
                 value={vmPassword}
                 onChange={(e) => setVmPassword(e.target.value)}
               />
@@ -96,31 +105,33 @@ export function CreateVMDialog() {
                   {showPassword ? "Hide password" : "Show password"}
                 </span>
               </Button>
-            </div>    
+            </div>
           </div>
           <div className="flex items-center gap-4">
-            <Label htmlFor="vmdistro" className="w-1/4 text-right">
+            <Label htmlFor="vmdistro" className="text-right w-1/6">
               Distro
             </Label>
             <DistroSelector setSelectedDistro={setSelectedDistro} />
           </div>
-          <VMResourceSlider
-            label="CPU Cores"
-            min={1}
-            max={8}
-            step={1}
-            defaultValue={cores}
-            onChange={setCores}
-          />
-          <VMResourceSlider
-            label="Memory"
-            min={1}
-            max={32}
-            step={2}
-            defaultValue={memory}
-            unit="GB"
-            onChange={setMemory}
-          />
+          <div className="grid grid-cols-2 gap-6">
+            <VMResourceSlider
+                label="CPU Cores"
+                min={1}
+                max={8}
+                step={1}
+                defaultValue={cores}
+                onChange={setCores}
+            />
+            <VMResourceSlider
+                label="Memory"
+                min={1}
+                max={32}
+                step={2}
+                defaultValue={memory}
+                unit="GB"
+                onChange={setMemory}
+            />
+          </div>
           <VMResourceSlider
             label="Disk Space"
             min={8}
@@ -132,7 +143,13 @@ export function CreateVMDialog() {
           />
         </div>
         <DialogFooter>
-          <Button type="button" onClick={handleSubmit}>Deploy</Button>
+          <Button 
+            type="button" 
+            onClick={handleSubmit} 
+            disabled={!isFormValid} // Disable button if form is incomplete
+          >
+            Deploy
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
