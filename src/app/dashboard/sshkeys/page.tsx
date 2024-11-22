@@ -9,18 +9,18 @@ import { toast } from "sonner";
 
 export default function SSHKeysPage() {
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await userVm();
-        console.log(response)
-      } catch (error) {
-        toast.error(`Failed to fetch user info: ${error}`);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await userVm();
+  //       console.log(response)
+  //     } catch (error) {
+  //       toast.error(`Failed to fetch user info: ${error}`);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
     return (
       <div className="p-4">
