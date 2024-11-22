@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { createVm } from "@/api/userVm";
 
-const socket = io("http://192.168.0.110:5000", { withCredentials: true });
+const socket = io("http://localhost:5000", { withCredentials: true });
 
 const SettingsPage = () => {
   const [taskId, setTaskId] = useState<string | null>(null);

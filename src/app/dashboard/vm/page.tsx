@@ -6,6 +6,8 @@ import { columns } from "./columns";
 import { userVm } from "@/api/userVm";
 import { toast } from "sonner";
 import { CreateVMDialog } from "./create-vm-dialog";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Page() {
   // State to hold the VM data
@@ -35,8 +37,11 @@ export default function Page() {
     <div className="h-full flex-1 flex-col space-y-2 p-8 md:flex">
       <div className="flex items-center justify-between">
         <p className="text-muted-foreground">User VMs here</p>
-        <CreateVMDialog />
-      </div>
+        {/* <CreateVMDialog /> */}
+        <Link href={"/dashboard/vm/create"}>
+          <Button variant="outline" >Create +</Button>
+        </Link>
+        </div>
       {/* DataTable with loading state inside */}
       <div className="overflow-x-auto">
         {loading ? (

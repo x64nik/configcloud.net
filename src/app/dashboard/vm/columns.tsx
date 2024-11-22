@@ -17,19 +17,18 @@ import {
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type VirtualMachine = {
-  instance_name: string
+  vm_name: string
   status: string
   memory: number
   cpu: number
   disk: string
   ip: string
-  os: string
-
+  storage: string
 }
 
 export const columns: ColumnDef<VirtualMachine>[] = [
   {
-    accessorKey: "instance_name",
+    accessorKey: "vm_name",
     header: "Machine Name",
   },
   {
@@ -47,7 +46,7 @@ export const columns: ColumnDef<VirtualMachine>[] = [
     },
   },
   {
-    accessorKey: "os",
+    accessorKey: "distro",
     header: "Operating System",
   },
   {
@@ -59,7 +58,7 @@ export const columns: ColumnDef<VirtualMachine>[] = [
     header: "Cores",
   },
   {
-    accessorKey: "disk",
+    accessorKey: "storage",
     header: "Storage",
   },
   {

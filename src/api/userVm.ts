@@ -6,7 +6,15 @@ export const userVm = async () => {
 };
 
 
-export const createVm = async (vmData: Record<string, any>) => {
-    const response = await apiClient.post("/vm/create", vmData);
+type vmData = {
+  distro: string;
+  vm_name: string;
+  cores: number;
+  memory: number;
+  keypair: string;
+}
+
+export const createVm = async (vmMetadata: vmData): Promise<any> => {
+    const response = await apiClient.post("/vm/create", vmMetadata);
     return response.data;
 };
