@@ -1,6 +1,6 @@
 "use client"
 
-import { listDistros } from "@/api/listDistros"
+import { listDistros, listInstances } from "@/api/listDistros"
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -8,26 +8,34 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { toast } from "sonner"
 import { createVm } from "@/api/userVm"
+import Component from "../vm-resource-slider"
 
 type Distro = {
   name: string;
   version: string;
 }
 
+type Instance = {
+  bandwidth: number,
+  cpu_cores: number,
+  disk_size: number,
+  instance_type: string,
+  memory: number,
+}
+
 
 export default function CreateVMPage() {
 
   const [distros, setDistros] = useState<Distro[]>([]);
+  const [instances, setInstances] = useState<Instance[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const [vmData, setVmData] = useState({
     vmName: null as string | null,
     osType: null as string | null,
+    instanceType: null as string | null,
     sshKeypair: null as string | null,
-    cores: null as number | null,
-    memory: null as number | null,
-    storage: null as number | null,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -35,14 +43,21 @@ export default function CreateVMPage() {
     // Handle number values properly
     setVmData((prevData) => ({
       ...prevData,
-      [name]: value === '' ? null : (name === 'cores' || name === 'memory' || name === 'storage') && !isNaN(Number(value)) ? Number(value) : value,
+      [name]: value,
     }));
   };
 
-  const handleSelectChange = (value: string) => {
+  const handleSelectChangeOS = (value: string) => {
     setVmData((prevData) => ({
       ...prevData,
       osType: value,
+    }));
+  };
+
+  const handleSelectChangeIT = (value: string) => {
+    setVmData((prevData) => ({
+      ...prevData,
+      instanceType: value,
     }));
   };
   
@@ -61,7 +76,24 @@ export default function CreateVMPage() {
     }
 
     loadDistros();
-  }, []); // Empty dependency array ensures this effect runs only once when the component mounts
+  }, []);
+
+  useEffect(() => {
+    async function loadinstances() {
+      try {
+        const response = await listInstances();
+        setInstances(response.data || []); // Update state with VM data
+        console.log(response.data)
+      } catch (err) {
+        setError("Error fetching Instances");
+        toast.error(`Failed to fetch Instances: ${err}`);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadinstances();
+  }, []);
+
 
   async function deployVm() {
     // try {
@@ -69,6 +101,7 @@ export default function CreateVMPage() {
     // }
     console.log(vmData.vmName);
     console.log(vmData.osType);
+    console.log(vmData.instanceType);
   }
 
   return (
@@ -93,10 +126,10 @@ export default function CreateVMPage() {
             Unique name for your Virtual Machine 
           </p>
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="distro">Operating System</Label>
+        <div className="space-y-3 grid grid-cols-2">
+          <Label htmlFor="distro">Operating System</Label><br/>
           <Select
-            onValueChange={handleSelectChange}
+            onValueChange={handleSelectChangeOS}
             required
           >
             <SelectTrigger id="osType">
@@ -118,9 +151,29 @@ export default function CreateVMPage() {
           </Select>
         </div>       
         <div className="space-y-2">
-          
-        </div>
-
+          <Label htmlFor="instanceType">Instance Type</Label>
+          <Select
+            onValueChange={handleSelectChangeIT}
+            required
+          >
+            <SelectTrigger id="instanceType">
+              <SelectValue placeholder="Select a instance type"/>
+            </SelectTrigger>
+            <SelectContent>
+              {loading && <p>Loading...</p>}
+              {error && <p className="text-red-500 size-1">{error}</p>}
+              {!loading &&
+                instances.map((instances) => (
+                  <SelectItem
+                    key={`${instances.instance_type}`}                 
+                    value={`${instances.instance_type}`}
+                  >
+                    {`${instances.instance_type} [${instances.memory / 1024 + 'GB Memory'}, ${instances.cpu_cores + 'vCPU'}, ${instances.disk_size + 'GB Storage'}, ${instances.bandwidth + 'Mbps'}]`}
+                  </SelectItem>
+                ))}
+            </SelectContent>
+          </Select>
+        </div>      
       </div>
       <Button size="sm" onClick={deployVm}>Deploy</Button>
     </div>

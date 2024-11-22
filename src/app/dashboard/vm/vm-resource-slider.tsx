@@ -46,11 +46,7 @@ export default function VMResourceSlider({
         defaultValue={[defaultValue]}
         onValueChange={handleValueChange}
         className="w-full"
-
-        
-
       />
-      
     </div>
   )
 }

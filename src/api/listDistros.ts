@@ -6,3 +6,8 @@ export const listDistros = async () => {
     return response;
   };
   
+
+export const listInstances = async () => {
+  const response = await apiClient.get('/distros/instances');
+  return response;
+};
