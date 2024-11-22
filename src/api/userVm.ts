@@ -5,6 +5,15 @@ export const userVm = async () => {
   return response;
 };
 
+export const userSSHKeys = async () => {
+  const response = await apiClient.get('/keygen/list_keys');
+  return response;
+};
+
+export const createSSHKey = async () => {
+  const response = await apiClient.post('/keygen/generate_key');
+  return response;
+};
 
 type vmData = {
   distro: string;

@@ -8,7 +8,8 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { toast } from "sonner"
 import { createVm } from "@/api/userVm"
-import Component from "../vm-resource-slider"
+import { userSSHKeys } from "@/api/userVm"
+import { CreateSSHKeyDialog } from "./create-sshkey-dialog"
 
 type Distro = {
   name: string;
@@ -23,14 +24,18 @@ type Instance = {
   memory: number,
 }
 
+type SSHKeys = {
+  name: string;
+}
 
 export default function CreateVMPage() {
 
   const [distros, setDistros] = useState<Distro[]>([]);
   const [instances, setInstances] = useState<Instance[]>([]);
+  const [sshkeys, setSSHKeys] = useState<SSHKeys[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
+  const [errors, setErrors] = useState<{ [key: string]: string | null }>({});
+  
   const [vmData, setVmData] = useState({
     vmName: null as string | null,
     osType: null as string | null,
@@ -57,9 +62,18 @@ export default function CreateVMPage() {
   const handleSelectChangeIT = (value: string) => {
     setVmData((prevData) => ({
       ...prevData,
+      sshKeypair: value,
+    }));
+  };
+
+  const handleSelectChangeSSHKey = (value: string) => {
+    setVmData((prevData) => ({
+      ...prevData,
       instanceType: value,
     }));
   };
+
+  
   
   useEffect(() => {
     async function loadDistros() {
@@ -68,7 +82,7 @@ export default function CreateVMPage() {
         setDistros(response.data || []); // Update state with VM data
         console.log(response.data)
       } catch (err) {
-        setError("Error fetching Distros");
+        setErrors((prev) => ({ ...prev, distros: "Error loading distros" }));
         toast.error(`Failed to fetch Distros: ${err}`);
       } finally {
         setLoading(false);
@@ -85,7 +99,7 @@ export default function CreateVMPage() {
         setInstances(response.data || []); // Update state with VM data
         console.log(response.data)
       } catch (err) {
-        setError("Error fetching Instances");
+        setErrors((prev) => ({ ...prev, instances: "Error loading instances" }));
         toast.error(`Failed to fetch Instances: ${err}`);
       } finally {
         setLoading(false);
@@ -94,6 +108,24 @@ export default function CreateVMPage() {
     loadinstances();
   }, []);
 
+  async function loadSSHKeys() {
+    try {
+      const response = await userSSHKeys();
+      
+      if (response.data === "No Keypairs") {
+        setSSHKeys([]);  // If no keypairs, set an empty array or just show the message
+        setErrors((prev) => ({ ...prev, sshkeys: "No SSH keys found." }));
+      } else {
+        setSSHKeys(response.data || []); // Update state with actual SSH keys data
+        console.log(response.data);
+      }
+    } catch (err) {
+      setErrors((prev) => ({ ...prev, sshkeys: "Error fetching SSH keys" }));
+      toast.error(`Failed to fetch SSH keys: ${err}`);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   async function deployVm() {
     // try {
@@ -102,6 +134,7 @@ export default function CreateVMPage() {
     console.log(vmData.vmName);
     console.log(vmData.osType);
     console.log(vmData.instanceType);
+    console.log(vmData.sshKeypair);
   }
 
   return (
@@ -137,7 +170,7 @@ export default function CreateVMPage() {
             </SelectTrigger>
             <SelectContent>
               {loading && <p>Loading...</p>}
-              {error && <p className="text-red-500 size-1">{error}</p>}
+              {errors.distros && <p className="text-red-500 size-1">{errors.distros}</p>}
               {!loading &&
                 distros.map((distro) => (
                   <SelectItem
@@ -161,7 +194,7 @@ export default function CreateVMPage() {
             </SelectTrigger>
             <SelectContent>
               {loading && <p>Loading...</p>}
-              {error && <p className="text-red-500 size-1">{error}</p>}
+              {errors.instances && <p className="text-red-500 size-1">{errors.instances}</p>}
               {!loading &&
                 instances.map((instances) => (
                   <SelectItem
@@ -173,7 +206,35 @@ export default function CreateVMPage() {
                 ))}
             </SelectContent>
           </Select>
-        </div>      
+        </div>
+        <div className="space-y-3 grid grid-cols-2 gap-1">
+          <Label htmlFor="distro">SSH Key</Label><br/>
+          <Select
+            onValueChange={handleSelectChangeIT}
+            onOpenChange={loadSSHKeys}
+            required
+          >
+            <SelectTrigger id="osType">
+              <SelectValue placeholder="Select your SSH key"/>
+            </SelectTrigger>
+            <SelectContent>
+              {loading && <p>Loading...</p>}
+              {errors.sshkeys && <p className="text-red-500 text-sm">{errors.sshkeys}</p>}
+              {!loading &&
+                sshkeys.map((sshkey) => (
+                  <SelectItem
+                    key={`${sshkey}`}                 
+                    value={`${sshkey}`}
+                  >
+                    {`${sshkey}`}
+                  </SelectItem>
+                ))}
+            </SelectContent>
+          </Select>
+          <div>
+          <CreateSSHKeyDialog/>
+          </div>
+        </div> 
       </div>
       <Button size="sm" onClick={deployVm}>Deploy</Button>
     </div>
