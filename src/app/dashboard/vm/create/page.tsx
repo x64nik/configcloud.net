@@ -10,6 +10,7 @@ import { toast } from "sonner"
 import { createVm } from "@/api/userVm"
 import { userSSHKeys } from "@/api/userVm"
 import { CreateSSHKeyDialog } from "./create-sshkey-dialog"
+import { useRouter } from "next/navigation";
 
 type Distro = {
   name: string;
@@ -29,7 +30,7 @@ type SSHKeys = {
 }
 
 export default function CreateVMPage() {
-
+  const router = useRouter();
   const [distros, setDistros] = useState<Distro[]>([]);
   const [instances, setInstances] = useState<Instance[]>([]);
   const [sshkeys, setSSHKeys] = useState<SSHKeys[]>([]);
@@ -42,6 +43,8 @@ export default function CreateVMPage() {
     instanceType: null as string | null,
     sshKeypair: null as string | null,
   });
+
+  const canSubmit = vmData.vmName && vmData.osType && vmData.instanceType && vmData.sshKeypair;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;  
@@ -62,18 +65,17 @@ export default function CreateVMPage() {
   const handleSelectChangeIT = (value: string) => {
     setVmData((prevData) => ({
       ...prevData,
-      sshKeypair: value,
+      instanceType: value,
     }));
   };
 
   const handleSelectChangeSSHKey = (value: string) => {
     setVmData((prevData) => ({
       ...prevData,
-      instanceType: value,
+      sshKeypair: value,
     }));
   };
 
-  
   
   useEffect(() => {
     async function loadDistros() {
@@ -140,6 +142,9 @@ export default function CreateVMPage() {
     console.log(vmData.osType);
     console.log(vmData.instanceType);
     console.log(vmData.sshKeypair);
+    router.push('/dashboard/vm');
+    
+    toast.info("VM creation is in quque")
   }
 
   return (
@@ -216,12 +221,12 @@ export default function CreateVMPage() {
           </p>
         </div>
         <div className="space-y-2 grid grid-cols-2">
-          <Label htmlFor="distro">SSH Key</Label><br/>
+          <Label htmlFor="sshKeypair">SSH Key</Label><br/>
           <Select
-            onValueChange={handleSelectChangeIT}
+            onValueChange={handleSelectChangeSSHKey}
             required
           >
-            <SelectTrigger id="osType">
+            <SelectTrigger id="sshKeypair">
               <SelectValue placeholder="Select your SSH key"/>
             </SelectTrigger>
             <SelectContent>
@@ -246,10 +251,8 @@ export default function CreateVMPage() {
           </p>
         </div> 
       </div>
-      <Button size="sm" onClick={deployVm}>Deploy</Button>
+      {!canSubmit && <Button disabled size="sm" onClick={deployVm}>Deploy</Button>}
+      {canSubmit && <Button size="sm" onClick={deployVm}>Deploy</Button>}
     </div>
-
-    
   )
 }
-
