@@ -108,6 +108,10 @@ export default function CreateVMPage() {
     loadinstances();
   }, []);
 
+  useEffect(() => {
+    loadSSHKeys();
+  },[])
+
   async function loadSSHKeys() {
     try {
       const response = await userSSHKeys();
@@ -116,6 +120,7 @@ export default function CreateVMPage() {
         setSSHKeys([]);  // If no keypairs, set an empty array or just show the message
         setErrors((prev) => ({ ...prev, sshkeys: "No SSH keys found." }));
       } else {
+        setErrors((prev) => ({ ...prev, sshkeys: null }));
         setSSHKeys(response.data || []); // Update state with actual SSH keys data
         console.log(response.data);
       }
@@ -126,7 +131,7 @@ export default function CreateVMPage() {
       setLoading(false);
     }
   }
-
+  
   async function deployVm() {
     // try {
     //   const response = await createVm()
@@ -156,10 +161,10 @@ export default function CreateVMPage() {
             onChange={handleChange}
           />
           <p className="text-xs text-muted-foreground">
-            Unique name for your Virtual Machine 
+          Provide a unique name for your Virtual Machine to easily identify and manage it in your system. Make sure the name is distinct to avoid conflicts with other VMs.
           </p>
         </div>
-        <div className="space-y-3 grid grid-cols-2">
+        <div className="space-y-2 grid grid-cols-2">
           <Label htmlFor="distro">Operating System</Label><br/>
           <Select
             onValueChange={handleSelectChangeOS}
@@ -182,7 +187,7 @@ export default function CreateVMPage() {
                 ))}
             </SelectContent>
           </Select>
-        </div>       
+        </div>          
         <div className="space-y-2">
           <Label htmlFor="instanceType">Instance Type</Label>
           <Select
@@ -206,12 +211,14 @@ export default function CreateVMPage() {
                 ))}
             </SelectContent>
           </Select>
+          <p className="text-xs text-muted-foreground">
+          Select the instance type based on your resource requirements. Different types offer varying CPU, memory, and storage options.
+          </p>
         </div>
-        <div className="space-y-3 grid grid-cols-2 gap-1">
+        <div className="space-y-2 grid grid-cols-2">
           <Label htmlFor="distro">SSH Key</Label><br/>
           <Select
             onValueChange={handleSelectChangeIT}
-            onOpenChange={loadSSHKeys}
             required
           >
             <SelectTrigger id="osType">
@@ -231,9 +238,12 @@ export default function CreateVMPage() {
                 ))}
             </SelectContent>
           </Select>
-          <div>
-          <CreateSSHKeyDialog/>
+          <div className="ml-1">
+          <CreateSSHKeyDialog fetchSSHKeys={loadSSHKeys}/>
           </div>
+          <p className="text-xs text-muted-foreground">
+          This key will be used for authentication to ensure a safe connection.
+          </p>
         </div> 
       </div>
       <Button size="sm" onClick={deployVm}>Deploy</Button>

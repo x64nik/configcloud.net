@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { CreateVMDialog } from "./create-vm-dialog";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import HostsGrid  from './host-grid'
 
 export default function Page() {
   // State to hold the VM data
@@ -54,6 +55,7 @@ export default function Page() {
           <DataTable data={data} columns={columns} />
         )}
       </div>
+
     </div>
   );
 }

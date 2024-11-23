@@ -62,10 +62,6 @@ export const columns: ColumnDef<VirtualMachine>[] = [
     header: "Storage",
   },
   {
-    accessorKey: "username",
-    header: "Username",
-  },
-  {
     accessorKey: "status",
     header: "Status",
   },
