@@ -1,44 +1,67 @@
 // app/dashboard/layout.tsx
 "use client";
 
-import React from "react";
+import { useState, useEffect } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { userInfo } from "@/api/userInfo";
 import { logout } from "@/api/Login";
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:5000", { withCredentials: true });
+
 
 type DashboardLayoutProps = {
   children: React.ReactNode;
 };
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-  const [user, setUser] = React.useState<{
+  const [status, setStatus] = useState<string>("");
+  const [user, setUser] = useState<{
     name: string;
     email: string;
     avatar: string;
   } | null>(null);
 
-  React.useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await userInfo();
-        setUser({
-          name: response.data.username,
-          email: response.data.email,
-          avatar: "path-to-image.png", // Replace with actual avatar if available
-        });
-      } catch (error) {
-        console.error("Failed to fetch user info:", error);
-      }
-    };
+  useEffect(() => {
     fetchUserData();
   }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const response = await userInfo();
+      setUser({
+        name: response.data.username,
+        email: response.data.email,
+        avatar: "path-to-image.png", // Replace with actual avatar if available
+      });
+    } catch (error) {
+      console.error("Failed to fetch user info:", error);
+    }
+  };
+
+  useEffect(() => {
+    // Connect to the socket on mount
+    socket.on("connect", () => {
+      console.log("Connected to Socket.IO server.");
+    });
+
+    // Listen for task status updates
+    socket.on("task_status", (data) => {
+      console.log("Task Status Update:", data);
+      setStatus(data.status);
+    });
+
+  }, []);
+
 
   const handleLogout = async () => {
     try {
       await logout();
+      socket.disconnect();
+      console.log("socket disconnected.")
       window.location.href = "/login"; // Redirect to login after logout
     } catch (error) {
       console.error("Logout failed:", error);

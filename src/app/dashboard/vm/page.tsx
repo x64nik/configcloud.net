@@ -9,12 +9,15 @@ import { CreateVMDialog } from "./create-vm-dialog";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import HostsGrid  from './host-grid'
+import { NavigationTabs } from "./navigation-panel";
+import { Separator } from "@/components/ui/separator";
 
 export default function Page() {
   // State to hold the VM data
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true); // Track loading state
   const [error, setError] = useState<string | null>(null); // Track errors
+  
 
   // UseEffect hook for fetching data
   useEffect(() => {
@@ -36,13 +39,6 @@ export default function Page() {
   return (
     
     <div className="h-full flex-1 flex-col space-y-2 p-8 md:flex">
-      <div className="flex items-center justify-between">
-        <p className="text-muted-foreground">User VMs here</p>
-        {/* <CreateVMDialog /> */}
-        <Link href={"/dashboard/vm/create"}>
-          <Button variant="outline" >Create +</Button>
-        </Link>
-        </div>
       {/* DataTable with loading state inside */}
       <div className="overflow-x-auto">
         {loading ? (
@@ -55,7 +51,8 @@ export default function Page() {
           <DataTable data={data} columns={columns} />
         )}
       </div>
-
+      <Separator className="my-3" />
+      <NavigationTabs />      
     </div>
   );
 }
