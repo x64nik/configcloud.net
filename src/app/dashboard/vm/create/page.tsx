@@ -38,13 +38,13 @@ export default function CreateVMPage() {
   const [errors, setErrors] = useState<{ [key: string]: string | null }>({});
   
   const [vmData, setVmData] = useState({
-    vmName: null as string | null,
-    osType: null as string | null,
-    instanceType: null as string | null,
-    sshKeypair: null as string | null,
+    vm_name: undefined as string | undefined,
+    distro: undefined as string | undefined,
+    instance_type: undefined as string | undefined,
+    keypair: undefined as string | undefined,
   });
 
-  const canSubmit = vmData.vmName && vmData.osType && vmData.instanceType && vmData.sshKeypair;
+  const canSubmit = Boolean(vmData.vm_name && vmData.distro && vmData.instance_type && vmData.keypair);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;  
@@ -58,21 +58,21 @@ export default function CreateVMPage() {
   const handleSelectChangeOS = (value: string) => {
     setVmData((prevData) => ({
       ...prevData,
-      osType: value,
+      distro: value,
     }));
   };
 
   const handleSelectChangeIT = (value: string) => {
     setVmData((prevData) => ({
       ...prevData,
-      instanceType: value,
+      instance_type: value,
     }));
   };
 
   const handleSelectChangeSSHKey = (value: string) => {
     setVmData((prevData) => ({
       ...prevData,
-      sshKeypair: value,
+      keypair: value,
     }));
   };
 
@@ -135,16 +135,25 @@ export default function CreateVMPage() {
   }
   
   async function deployVm() {
-    // try {
-    //   const response = await createVm()
-    // }
-    console.log(vmData.vmName);
-    console.log(vmData.osType);
-    console.log(vmData.instanceType);
-    console.log(vmData.sshKeypair);
-    router.push('/dashboard/vm');
+    try {
+      const response = await createVm(vmData)
+      toast.info(`VM creation is in queue: ${response.data}`)
+    } catch (err) {
+      console.log("ook")
+      toast.error(`${err}`)
+    } finally {
+      console.log("finally here")
+    }
+
+    // console.log(vmData.vm_name);
+    // console.log(vmData.distro);
+    // console.log(vmData.instance_name);
+    // console.log(vmData.keypair);
+
+
+    router.push('/dashboard/vm?reload=true');
     
-    toast.info("VM creation is in quque")
+    
   }
 
   return (
@@ -158,11 +167,11 @@ export default function CreateVMPage() {
 
       <div className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="vmName">VM Name</Label>
+          <Label htmlFor="vm_name">VM Name</Label>
           <Input required
-            id="vmName"
-            name="vmName"
-            value={vmData.vmName || ''}
+            id="vm_name"
+            name="vm_name"
+            value={vmData.vm_name || ''}
             onChange={handleChange}
           />
           <p className="text-xs text-muted-foreground">
@@ -175,7 +184,7 @@ export default function CreateVMPage() {
             onValueChange={handleSelectChangeOS}
             required
           >
-            <SelectTrigger id="osType">
+            <SelectTrigger id="distro">
               <SelectValue placeholder="Select a operatng system"/>
             </SelectTrigger>
             <SelectContent>
@@ -185,7 +194,7 @@ export default function CreateVMPage() {
                 distros.map((distro) => (
                   <SelectItem
                     key={`${distro.name}-${distro.version}`}                 
-                    value={`${distro.name}-${distro.version}`}
+                    value={`${distro.name}`}
                   >
                     {`${distro.name}-${distro.version}`}
                   </SelectItem>
@@ -194,12 +203,12 @@ export default function CreateVMPage() {
           </Select>
         </div>          
         <div className="space-y-2">
-          <Label htmlFor="instanceType">Instance Type</Label>
+          <Label htmlFor="instance_type">Instance Type</Label>
           <Select
             onValueChange={handleSelectChangeIT}
             required
           >
-            <SelectTrigger id="instanceType">
+            <SelectTrigger id="instance_type">
               <SelectValue placeholder="Select a instance type"/>
             </SelectTrigger>
             <SelectContent>
@@ -221,12 +230,12 @@ export default function CreateVMPage() {
           </p>
         </div>
         <div className="space-y-2 grid grid-cols-2">
-          <Label htmlFor="sshKeypair">SSH Key</Label><br/>
+          <Label htmlFor="keypair">SSH Key</Label><br/>
           <Select
             onValueChange={handleSelectChangeSSHKey}
             required
           >
-            <SelectTrigger id="sshKeypair">
+            <SelectTrigger id="keypair">
               <SelectValue placeholder="Select your SSH key"/>
             </SelectTrigger>
             <SelectContent>
@@ -251,8 +260,15 @@ export default function CreateVMPage() {
           </p>
         </div> 
       </div>
-      {!canSubmit && <Button disabled size="sm" onClick={deployVm}>Deploy</Button>}
-      {canSubmit && <Button size="sm" onClick={deployVm}>Deploy</Button>}
+      {!canSubmit ? (
+        <Button disabled size="sm">
+          Deploy
+        </Button>
+      ) : (
+        <Button size="sm" onClick={deployVm}>
+          Deploy
+        </Button>
+      )}
     </div>
   )
 }

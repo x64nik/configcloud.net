@@ -1,7 +1,7 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { ChevronRight, MoreHorizontal, Settings2, SettingsIcon, ArrowUpDown, TrendingUpDownIcon, ChevronsUpDown, Trash2, CirclePlay, Ban, Play, RotateCcw } from "lucide-react"
+import { ChevronRight, MoreHorizontal, Settings2, SettingsIcon, ArrowUpDown, TrendingUpDownIcon, ChevronsUpDown, Trash2, CirclePlay, Ban, Play, RotateCcw, Check, StopCircle, Timer, CircleCheck, CircleX, Clock } from "lucide-react"
 
 
 import { Button } from "@/components/ui/button"
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Checkbox } from "@/components/ui/checkbox"
 import ConfigurationsContent from "./configurations"
+import { cn } from "@/utils/cn"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -33,16 +34,6 @@ const useTableColumns = ({setSelectedRow} : {setSelectedRow : React.Dispatch<Rea
 const columns: ColumnDef<VirtualMachine>[] = [
   {
     id: "select",
-    // header: ({ table }) => (
-    //   <Checkbox
-    //     checked={
-    //       table.getIsAllPageRowsSelected() ||
-    //       (table.getIsSomePageRowsSelected() && "indeterminate")
-    //     }
-    //     onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-    //     aria-label="Select all"
-    //   />
-    // ),
     cell: ({ row, table }) => {
       // Access the row data
       const rowData = row.original;
@@ -55,20 +46,12 @@ const columns: ColumnDef<VirtualMachine>[] = [
             if (value) {
               // If this row is being checked, uncheck all other rows
               table.toggleAllRowsSelected(false);
-
-              // Log the IP address when the checkbox state changes
-              console.log(rowData.ip);
-              
               setSelectedRow(rowData);
             } else {
-              // Log the row being unchecked
-              console.log("unchecked");
               setSelectedRow(undefined);
             }
-
             // Toggle selection for this row
             row.toggleSelected(!!value)
-
           }}
           aria-label="Select row"
         />
@@ -80,6 +63,10 @@ const columns: ColumnDef<VirtualMachine>[] = [
     header: "Machine Name",
   },
   {
+    accessorKey: "vm_id",
+    header: "Machine ID",
+  },
+  {
     accessorKey: "ip",
     header: ({ column }) => {
       return (
@@ -87,7 +74,7 @@ const columns: ColumnDef<VirtualMachine>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          IP 
+          <p className="font-semibold">IP</p> 
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
@@ -98,20 +85,50 @@ const columns: ColumnDef<VirtualMachine>[] = [
     header: "Operating System",
   },
   {
-    accessorKey: "memory",
-    header: "Memory",
-  },
-  {
-    accessorKey: "cores",
-    header: "Cores",
-  },
-  {
-    accessorKey: "storage",
-    header: "Storage",
-  },
-  {
     accessorKey: "status",
     header: "Status",
+    cell: ({ row }) => {
+      const type = row.getValue("status"); // Retrieve the status value
+      return (
+        <div className="flex w-[100px] items-center space-x-2">
+          {/* Conditionally render icons based on status */}
+          {type === "created" && <CircleCheck className="text-blue-500 ml-2 h-4 w-4"/> }
+          {type === "pending" && <Clock className="text-yellow-500 ml-2 h-4 w-4" />}
+          {type === "running" && <CirclePlay className="text-green-500 ml-2 h-4 w-4" />}
+          {type === "stopped" && <CircleX className="text-red-500 ml-2 h-4 w-4" />}
+          
+          {/* Display the status text */}
+          <span
+            className={cn(
+              "capitalize",
+              type === "pending"
+              ? "text-gray-400"
+              : type === "stopped"
+              ? "text-gray-400"
+              : "text-white"
+                
+            )}
+          >
+            {" "}
+            {row.getValue("status")}
+          </span>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "creation_date",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          <p className="font-semibold">Created On</p>
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
   },
   {
     id: "actions",
@@ -151,7 +168,7 @@ const columns: ColumnDef<VirtualMachine>[] = [
       )
     },
   },
-  
+
 ] 
 
 return {columns};

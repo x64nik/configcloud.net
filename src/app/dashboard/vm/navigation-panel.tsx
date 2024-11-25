@@ -19,17 +19,8 @@ import MonitoringContent from "./monitoring"
 import ConfigurationsContent from "./configurations"
 import NetworkingContent from "./networking"
 import { VirtualMachine } from "./columns"
-import { useEffect } from "react"
 
 export function NavigationTabs({selectedRow} : {selectedRow : VirtualMachine | undefined}) {
-
-  useEffect(()=>{
-    if (selectedRow) {
-      console.log(selectedRow, "row selected");
-    } else {
-      console.log("row unselected");
-    }
-  }, [selectedRow]) 
 
   return (
     <Tabs defaultValue="configurations" className="w-full">

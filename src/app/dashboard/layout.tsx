@@ -8,9 +8,6 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { userInfo } from "@/api/userInfo";
 import { logout } from "@/api/Login";
-import { io } from "socket.io-client";
-
-const socket = io("http://192.168.0.110:5000", { withCredentials: true });
 
 
 type DashboardLayoutProps = {
@@ -42,25 +39,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     }
   };
 
-  useEffect(() => {
-    // Connect to the socket on mount
-    socket.on("connect", () => {
-      console.log("Connected to Socket.IO server.");
-    });
-
-    // Listen for task status updates
-    socket.on("task_status", (data) => {
-      console.log("Task Status Update:", data);
-      setStatus(data.status);
-    });
-
-  }, []);
-
-
+  
   const handleLogout = async () => {
     try {
       await logout();
-      socket.disconnect();
+      // socket.disconnect();
       console.log("socket disconnected.")
       window.location.href = "/login"; // Redirect to login after logout
     } catch (error) {
