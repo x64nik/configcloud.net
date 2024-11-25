@@ -28,7 +28,9 @@ export type VirtualMachine = {
   storage: string
 }
 
-export const columns: ColumnDef<VirtualMachine>[] = [
+const useTableColumns = ({setSelectedRow} : {setSelectedRow : React.Dispatch<React.SetStateAction<VirtualMachine | undefined>>}) => {
+
+const columns: ColumnDef<VirtualMachine>[] = [
   {
     id: "select",
     // header: ({ table }) => (
@@ -56,9 +58,12 @@ export const columns: ColumnDef<VirtualMachine>[] = [
 
               // Log the IP address when the checkbox state changes
               console.log(rowData.ip);
+              
+              setSelectedRow(rowData);
             } else {
               // Log the row being unchecked
               console.log("unchecked");
+              setSelectedRow(undefined);
             }
 
             // Toggle selection for this row
@@ -147,4 +152,10 @@ export const columns: ColumnDef<VirtualMachine>[] = [
     },
   },
   
-]
+] 
+
+return {columns};
+
+}
+
+export default useTableColumns;

@@ -18,8 +18,19 @@ import {
 import MonitoringContent from "./monitoring"
 import ConfigurationsContent from "./configurations"
 import NetworkingContent from "./networking"
+import { VirtualMachine } from "./columns"
+import { useEffect } from "react"
 
-export function NavigationTabs() {
+export function NavigationTabs({selectedRow} : {selectedRow : VirtualMachine | undefined}) {
+
+  useEffect(()=>{
+    if (selectedRow) {
+      console.log(selectedRow, "row selected");
+    } else {
+      console.log("row unselected");
+    }
+  }, [selectedRow]) 
+
   return (
     <Tabs defaultValue="configurations" className="w-full">
       <div className="w-full sm:w-[300px] md:w-[400px] lg:w-[500px]">
@@ -31,7 +42,7 @@ export function NavigationTabs() {
       </div>
       <div className="w-full">
       <TabsContent value="configurations">
-        <ConfigurationsContent />
+        <ConfigurationsContent selectedVM={selectedRow}/>
       </TabsContent>
       </div>
       <div className="w-full">

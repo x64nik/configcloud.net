@@ -10,7 +10,7 @@ import { userInfo } from "@/api/userInfo";
 import { logout } from "@/api/Login";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:5000", { withCredentials: true });
+const socket = io("http://192.168.0.110:5000", { withCredentials: true });
 
 
 type DashboardLayoutProps = {

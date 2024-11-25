@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { DataTable } from "./data-table";
-import { columns } from "./columns";
+// import { columns } from "./columns";
 import { userVm } from "@/api/userVm";
 import { toast } from "sonner";
 import { CreateVMDialog } from "./create-vm-dialog";
@@ -11,13 +11,17 @@ import Link from "next/link";
 import HostsGrid  from './host-grid'
 import { NavigationTabs } from "./navigation-panel";
 import { Separator } from "@/components/ui/separator";
+import useTableColumns, { VirtualMachine } from "./columns";
 
 export default function Page() {
   // State to hold the VM data
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true); // Track loading state
   const [error, setError] = useState<string | null>(null); // Track errors
-  
+  const [selectedRow, setSelectedRow] = useState<VirtualMachine | undefined>(undefined);
+  const {columns} = useTableColumns({
+    setSelectedRow : setSelectedRow
+  })
 
   // UseEffect hook for fetching data
   useEffect(() => {
@@ -52,7 +56,7 @@ export default function Page() {
         )}
       </div>
       <Separator className="my-3" />
-      <NavigationTabs />      
+      <NavigationTabs selectedRow={selectedRow}/>      
     </div>
   );
 }
