@@ -52,6 +52,10 @@ export default function Page() {
         vm.vm_name === vm_name ? { ...vm, status } : vm
       )
     );
+
+    console.log(data.vm_name)
+    console.log(data.status)
+    
   };
 
   useEffect(() => {
@@ -61,13 +65,12 @@ export default function Page() {
     });
 
     // Listen for task status updates
-    socket.on("task_status", handleSocketUpdate);
-
-    // Cleanup function to disconnect the socket on unmount
-    // return () => {
-    //   socket.off("task_status", handleSocketUpdate);
-    //   socket.disconnect();
-    // };
+    socket.on("task_status", (newStatus) => {
+      console.log("Task status updated:", newStatus); // Debug log
+      setStatus(newStatus);
+      handleSocketUpdate(newStatus);
+    });
+    
   }, []);
 
   useEffect(() => {
