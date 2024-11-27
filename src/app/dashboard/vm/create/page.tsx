@@ -42,6 +42,7 @@ export default function CreateVMPage() {
     distro: undefined as string | undefined,
     instance_type: undefined as string | undefined,
     keypair: undefined as string | undefined,
+    username: undefined as string | undefined,
   });
 
   const canSubmit = Boolean(vmData.vm_name && vmData.distro && vmData.instance_type && vmData.keypair);
@@ -137,23 +138,14 @@ export default function CreateVMPage() {
   async function deployVm() {
     try {
       const response = await createVm(vmData)
-      toast.info(`VM creation is in queue: ${response.data}`)
+      toast.info(`VM creation is in queue`)
     } catch (err) {
-      console.log("ook")
+      console.log("error in vm creation")
       toast.error(`${err}`)
     } finally {
       console.log("finally here")
     }
-
-    // console.log(vmData.vm_name);
-    // console.log(vmData.distro);
-    // console.log(vmData.instance_name);
-    // console.log(vmData.keypair);
-
-
-    router.push('/dashboard/vm?reload=true');
-    
-    
+    router.push('/dashboard/vm?reload=true');    
   }
 
   return (
@@ -178,7 +170,17 @@ export default function CreateVMPage() {
           Provide a unique name for your Virtual Machine to easily identify and manage it in your system. Make sure the name is distinct to avoid conflicts with other VMs.
           </p>
         </div>
-        <div className="space-y-2 grid grid-cols-2">
+        <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-1">
+          <Label htmlFor="username">Username</Label>
+          <Input required
+            id="username"
+            name="username"
+            value={vmData.username || ''}
+            onChange={handleChange}
+          />
+          </div>
+          <div className="space-y-1">
           <Label htmlFor="distro">Operating System</Label><br/>
           <Select
             onValueChange={handleSelectChangeOS}
@@ -201,6 +203,8 @@ export default function CreateVMPage() {
                 ))}
             </SelectContent>
           </Select>
+          </div>
+          <br/>
         </div>          
         <div className="space-y-2">
           <Label htmlFor="instance_type">Instance Type</Label>

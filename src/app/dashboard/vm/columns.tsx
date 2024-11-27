@@ -92,21 +92,24 @@ const columns: ColumnDef<VirtualMachine>[] = [
       return (
         <div className="flex w-[100px] items-center space-x-2">
           {/* Conditionally render icons based on status */}
-          {type === "created" && <CircleCheck className="text-blue-500 ml-2 h-4 w-4"/> }
-          {type === "pending" && <Clock className="text-yellow-500 ml-2 h-4 w-4" />}
-          {type === "running" && <CirclePlay className="text-green-500 ml-2 h-4 w-4" />}
-          {type === "stopped" && <CircleX className="text-red-500 ml-2 h-4 w-4" />}
+          {type === "created" && <CircleCheck className="text-blue-500 h-4 w-4" strokeWidth={3}/> }
+          {type === "pending" && <Clock className="text-yellow-500 h-4 w-4" strokeWidth={3}/>}
+          {type === "running" && <CirclePlay className="text-green-500 h-4 w-4" strokeWidth={3}/>}
+          {type === "stopped" && <CircleX className="text-red-500 h-4 w-4" strokeWidth={3}/>}
           
           {/* Display the status text */}
           <span
             className={cn(
-              "capitalize",
-              type === "pending"
-              ? "text-gray-400"
-              : type === "stopped"
-              ? "text-gray-400"
-              : "text-white"
-                
+              "capitalize font-bold",
+              type === "created"
+              ? "text-blue-500"
+              : type === "pending"
+              ? "text-yellow-500"
+              : type == "running"
+              ? "text-green-500"
+              : type == "stopped"
+              ? "text-red-500"
+              : "text-red-500"
             )}
           >
             {" "}

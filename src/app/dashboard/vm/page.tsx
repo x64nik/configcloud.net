@@ -79,6 +79,7 @@ export default function Page() {
     // If the `reload` flag is present, fetch the data again
     if (reloadFlag === "true") {
       fetchData();
+      console.log("reload vm page")
     }
   }, [searchParams]); // Adding searchParams as dependency to reload data when params change
 
