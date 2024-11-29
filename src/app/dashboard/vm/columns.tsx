@@ -16,10 +16,13 @@ import {
 import { Checkbox } from "@/components/ui/checkbox"
 import ConfigurationsContent from "./configurations"
 import { cn } from "@/utils/cn"
+import { vmState } from "@/api/vmActions"
+import { toast } from "sonner"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type VirtualMachine = {
+  vm_id: string
   vm_name: string
   status: string
   memory: number
@@ -31,7 +34,20 @@ export type VirtualMachine = {
 
 const useTableColumns = ({setSelectedRow} : {setSelectedRow : React.Dispatch<React.SetStateAction<VirtualMachine | undefined>>}) => {
 
+  async function vmActions(vm_id: string, action: string) {
+  try {
+    const response = await vmState(vm_id, action)
+    console.log(response)
+  } catch (err) {
+    console.log(`error while ${action} vm`)
+    toast.error(`${err}`)
+  } finally {
+    console.log("finally here")
+  }
+}
+  
 const columns: ColumnDef<VirtualMachine>[] = [
+  
   {
     id: "select",
     cell: ({ row, table }) => {
@@ -137,7 +153,7 @@ const columns: ColumnDef<VirtualMachine>[] = [
     id: "actions",
     header: "Actions",
     cell: ({ row }) => {
-      const payment = row.original
+      const vm = row.original
  
       return (
         <div className="flex gap-4">
@@ -152,15 +168,24 @@ const columns: ColumnDef<VirtualMachine>[] = [
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              {/* <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(payment.id)}
-              >
-                Copy payment ID
-              </DropdownMenuItem> */}
               <DropdownMenuSeparator />
-              <DropdownMenuItem><Play />Start</DropdownMenuItem>
-              <DropdownMenuItem><Ban />Stop</DropdownMenuItem>
-              <DropdownMenuItem><RotateCcw />Reboot</DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={() => vmActions(vm.vm_id, "start")}
+                disabled={vm.status === "pending" || vm.status === "running"}
+                ><Play />Start
+              </DropdownMenuItem>
+
+              <DropdownMenuItem 
+                onClick={() => vmActions(vm.vm_id, "shutdown")}
+                disabled={vm.status === "pending" || vm.status === "stopped"}
+                ><Ban />Shutdown
+              </DropdownMenuItem>
+
+              <DropdownMenuItem 
+                onClick={() => vmActions(vm.vm_id, "reboot")}
+                disabled={vm.status === "pending" || vm.status === "stopped"}
+                ><RotateCcw />Reboot
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 

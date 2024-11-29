@@ -44,16 +44,16 @@ export default function Page() {
 
   // Function to handle socket updates (task status change)
   const handleSocketUpdate = (data: any) => {
-    const { vm_name, status } = data;
+    const { vm_id, status } = data;
 
     // Update the specific VM's status in the state
     setData((prevVms: VirtualMachine[]) =>
       prevVms.map((vm) =>
-        vm.vm_name === vm_name ? { ...vm, status } : vm
+        vm.vm_id === vm_id ? { ...vm, status } : vm
       )
     );
 
-    console.log(data.vm_name)
+    console.log(data.vm_id)
     console.log(data.status)
     
   };
