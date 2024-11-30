@@ -6,9 +6,12 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/utils/cn";
 import { Toaster, toast } from 'sonner'
 import { login } from '@/api/Login'; // Import the API request function
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 export default function LoginPage() {
     const router = useRouter();
+    const [loading, setLoading] = React.useState(false);
 
     const [user, setUser] = React.useState({
       email: "",
@@ -17,7 +20,7 @@ export default function LoginPage() {
 
     const onLogin = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-
+      setLoading(true);
       try {
         const response = await login({ 
           email: user.email, 
@@ -29,14 +32,12 @@ export default function LoginPage() {
         router.push("/dashboard");
  
       } catch (error) {
-        
+
           console.log("Login Failed", error);
-          toast.error(`${error}`);
+          toast.error(`${error}` || "An error occurred during Login.");
         
         } finally {
-          
-          console.log("in final");
-        
+          setLoading(false);
         }
               
     };
@@ -62,13 +63,18 @@ export default function LoginPage() {
                 <Label htmlFor="password">Password<span className="text-red-500"> *</span></Label>
                 <Input id="password" placeholder="••••••••" type="password" required value={user.password} onChange={(e) => setUser({...user, password: e.target.value})}/>
             </LabelInputContainer>
-            <button
-                className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+            <Button
+                className="flex items-center justify-center bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600  dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
                 type="submit"
-            >
-                Login &rarr;
+                disabled={loading}>
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <span>Loading...</span>
+                  </> 
+                ) : ("Login")}
                 <BottomGradient />
-            </button>
+            </Button>
             <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
             <div className="text-center text-sm text-neutral-500 dark:text-neutral-400 mt-8">
             Dont have an account?

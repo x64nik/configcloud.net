@@ -46,6 +46,16 @@ export default function Page() {
   const handleSocketUpdate = (data: any) => {
     const { vm_id, status } = data;
 
+      // Check if the action is 'delete'
+    if (status === 'deleted') {
+      // Remove the specific VM from the state
+      setData((prevVms: VirtualMachine[]) =>
+        prevVms.filter((vm) => vm.vm_id !== vm_id)
+      );
+
+      toast.success("VM successfully deleted")
+    } 
+
     // Update the specific VM's status in the state
     setData((prevVms: VirtualMachine[]) =>
       prevVms.map((vm) =>

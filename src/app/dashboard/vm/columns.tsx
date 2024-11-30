@@ -16,7 +16,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox"
 import ConfigurationsContent from "./configurations"
 import { cn } from "@/utils/cn"
-import { vmState } from "@/api/vmActions"
+import { vmDelete, vmState } from "@/api/vmActions"
 import { toast } from "sonner"
 
 // This type is used to define the shape of our data.
@@ -32,19 +32,32 @@ export type VirtualMachine = {
   storage: string
 }
 
+
 const useTableColumns = ({setSelectedRow} : {setSelectedRow : React.Dispatch<React.SetStateAction<VirtualMachine | undefined>>}) => {
 
   async function vmActions(vm_id: string, action: string) {
-  try {
-    const response = await vmState(vm_id, action)
-    console.log(response)
-  } catch (err) {
-    console.log(`error while ${action} vm`)
-    toast.error(`${err}`)
-  } finally {
-    console.log("finally here")
+    try {
+      const response = await vmState(vm_id, action)
+      console.log(response)
+    } catch (err) {
+      console.log(`error while ${action} vm`)
+      toast.error(`${err}`)
+    } finally {
+      console.log("finally here")
+    }
   }
-}
+
+  async function DeleteVM (vm_id: string) {
+    try {
+      const response = await vmDelete(vm_id)
+      console.log(response)
+    } catch (err) {
+      console.log(`error while deleting  vm: ${vm_id}`)
+    } 
+    finally {
+      console.log("delete final")
+    }
+  }
   
 const columns: ColumnDef<VirtualMachine>[] = [
   
@@ -80,7 +93,7 @@ const columns: ColumnDef<VirtualMachine>[] = [
   },
   {
     accessorKey: "vm_id",
-    header: "Machine ID",
+    header: "MachineID",
   },
   {
     accessorKey: "ip",
@@ -90,8 +103,8 @@ const columns: ColumnDef<VirtualMachine>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          <p className="font-semibold">IP</p> 
-          <ChevronsUpDown className="ml-2 h-4 w-4" />
+          <p className="font-semibold">PrivateIP</p> 
+          <ChevronsUpDown/>
         </Button>
       )
     },
@@ -106,29 +119,14 @@ const columns: ColumnDef<VirtualMachine>[] = [
     cell: ({ row }) => {
       const type = row.getValue("status"); // Retrieve the status value
       return (
-        <div className="flex w-[100px] items-center space-x-2">
-          {/* Conditionally render icons based on status */}
-          {type === "created" && <CircleCheck className="text-blue-500 h-4 w-4" strokeWidth={3}/> }
-          {type === "pending" && <Clock className="text-yellow-500 h-4 w-4" strokeWidth={3}/>}
-          {type === "running" && <CirclePlay className="text-green-500 h-4 w-4" strokeWidth={3}/>}
-          {type === "stopped" && <CircleX className="text-red-500 h-4 w-4" strokeWidth={3}/>}
-          
-          {/* Display the status text */}
-          <span
-            className={cn(
-              "capitalize font-bold",
-              type === "created"
-              ? "text-blue-500"
-              : type === "pending"
-              ? "text-yellow-500"
-              : type == "running"
-              ? "text-green-500"
-              : type == "stopped"
-              ? "text-red-500"
-              : "text-red-500"
-            )}
-          >
-            {" "}
+        <div className="flex w-[100px] items-center">
+          <span className={`inline-block px-2 py-1 text-xs font-semibold rounded-full ${
+              type === 'available' ? 'bg-blue-900 text-blue-200' :
+              type === 'pending' ? 'bg-yellow-900 text-yellow-200' :
+              type === 'running' ? 'bg-green-900 text-green-200' :
+              type === 'stopped' ? 'bg-red-900 text-red-200' :
+              'bg-gray-700 text-gray-200'
+            }`}>
             {row.getValue("status")}
           </span>
         </div>
@@ -143,8 +141,8 @@ const columns: ColumnDef<VirtualMachine>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          <p className="font-semibold">Created On</p>
-          <ChevronsUpDown className="ml-2 h-4 w-4" />
+          <p className="font-semibold">CreatedOn</p>
+          <ChevronsUpDown/>
         </Button>
       )
     },
@@ -177,19 +175,25 @@ const columns: ColumnDef<VirtualMachine>[] = [
 
               <DropdownMenuItem 
                 onClick={() => vmActions(vm.vm_id, "shutdown")}
-                disabled={vm.status === "pending" || vm.status === "stopped"}
+                disabled={vm.status === "pending" || vm.status === "stopped" || vm.status === "available" || vm.status === "unavailable"}
                 ><Ban />Shutdown
               </DropdownMenuItem>
 
               <DropdownMenuItem 
                 onClick={() => vmActions(vm.vm_id, "reboot")}
-                disabled={vm.status === "pending" || vm.status === "stopped"}
+                disabled={vm.status === "pending" || vm.status === "stopped" || vm.status === "available" || vm.status === "unavailable"}
                 ><RotateCcw />Reboot
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button variant="destructive" className="h-8 w-8 p-0" size="icon">
+          <Button 
+            variant="destructive" 
+            className="h-8 w-8 p-0" 
+            size="icon"
+            disabled={vm.status == "running" || vm.status === "pending" || vm.status === "unavailable"}
+            onClick={() => DeleteVM(vm.vm_id)}
+            >
             <Trash2/>
           </Button>
         </div>
