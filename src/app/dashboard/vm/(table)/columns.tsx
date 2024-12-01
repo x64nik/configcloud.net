@@ -1,9 +1,7 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { ChevronRight, MoreHorizontal, Settings2, SettingsIcon, ArrowUpDown, TrendingUpDownIcon, ChevronsUpDown, Trash2, CirclePlay, Ban, Play, RotateCcw, Check, StopCircle, Timer, CircleCheck, CircleX, Clock } from "lucide-react"
-
-
+import { SettingsIcon, ChevronsUpDown, Trash2,Ban, Play, RotateCcw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -14,13 +12,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Checkbox } from "@/components/ui/checkbox"
-import ConfigurationsContent from "./configurations"
-import { cn } from "@/utils/cn"
 import { vmDelete, vmState } from "@/api/vmActions"
 import { toast } from "sonner"
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
+
 export type VirtualMachine = {
   vm_id: string
   vm_name: string

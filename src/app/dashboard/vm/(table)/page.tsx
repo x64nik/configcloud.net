@@ -5,14 +5,10 @@ import { DataTable } from "./data-table";
 // import { columns } from "./columns";
 import { userVm } from "@/api/userVm";
 import { toast } from "sonner";
-import { CreateVMDialog } from "./create-vm-dialog";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import HostsGrid  from './host-grid';
 import { NavigationTabs } from "./navigation-panel";
 import { Separator } from "@/components/ui/separator";
 import useTableColumns, { VirtualMachine } from "./columns";
-import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 
 import { io } from "socket.io-client";
 

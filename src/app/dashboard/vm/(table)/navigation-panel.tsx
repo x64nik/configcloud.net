@@ -1,22 +1,11 @@
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
-import MonitoringContent from "./monitoring"
 import ConfigurationsContent from "./configurations"
+import MonitoringContent from "./MonitoringContent"
 import NetworkingContent from "./networking"
 import { VirtualMachine } from "./columns"
 
@@ -38,12 +27,12 @@ export function NavigationTabs({selectedRow} : {selectedRow : VirtualMachine | u
       </div>
       <div className="w-full">
       <TabsContent value="networking">
-        <NetworkingContent />
+        <NetworkingContent selectedVM={selectedRow}/>
       </TabsContent>
       </div>
       <div className="w-full">
       <TabsContent value="monitoring">
-        <MonitoringContent />
+        <MonitoringContent selectedVM={selectedRow}/>
       </TabsContent>
       </div>
     </Tabs>

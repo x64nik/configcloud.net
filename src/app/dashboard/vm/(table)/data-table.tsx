@@ -23,8 +23,6 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Separator } from "@/components/ui/separator"
-import {NavigationTabs} from "./navigation-panel";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
