@@ -14,28 +14,27 @@ const MonitoringContent = ({ selectedVM }: { selectedVM: VirtualMachine | undefi
         return;
     } // If no selected VM, do nothing.
 
-    const monitor_socket = io("http://localhost:5001", { withCredentials: true });
+    // const monitor_socket = io("http://localhost:5001", { withCredentials: true });
 
 
-    monitor_socket.emit("connect_monitor_socket", { vm_id: selectedVM.vm_id });
+    // monitor_socket.emit("connect_monitor_socket", { vm_id: selectedVM.vm_id });
 
-    monitor_socket.on("msg", (data) => {
-        setLiveData((prevData) => [...prevData, data]);
-        console.log(data)
-        console.log("live log tailing started!");
-    });
+    // monitor_socket.on("msg", (data) => {
+    //     setLiveData((prevData) => [...prevData, data]);
+    //     console.log("live log tailing started!");
+    // });
 
-    console.log(liveData)
+    // console.log(liveData)
 
     // socket.on("task_status", (newStatus) => {
     //     console.log("Task status updated:", newStatus); // Debug log
     // });
 
     // Clean up the WebSocket connection on component unmount or selectedVM change
-    return () => {
-        console.log("Disconnected to Monitoring Socket.IO server.");
-        monitor_socket.close();
-    };
+    // return () => {
+    //     console.log("Disconnected to Monitoring Socket.IO server.");
+    //     monitor_socket.close();
+    // };
   }, [selectedVM]);
 
   return (

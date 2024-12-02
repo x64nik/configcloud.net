@@ -143,9 +143,9 @@ export default function CreateVMPage() {
       console.log("error in vm creation")
       toast.error(`${err}`)
     } finally {
-      console.log("finally here")
+      console.log("going back to vm table")
     }
-    router.push('/dashboard/vm?reload=true');    
+    router.push('/dashboard/vm');    
   }
 
   return (
