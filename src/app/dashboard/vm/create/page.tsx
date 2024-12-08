@@ -11,6 +11,7 @@ import { createVm } from "@/api/userVm"
 import { userSSHKeys } from "@/api/userVm"
 import { CreateSSHKeyDialog } from "./create-sshkey-dialog"
 import { useRouter } from "next/navigation";
+import { Checkbox } from "@/components/ui/checkbox"
 
 type Distro = {
   name: string;
@@ -34,6 +35,7 @@ export default function CreateVMPage() {
   const [distros, setDistros] = useState<Distro[]>([]);
   const [instances, setInstances] = useState<Instance[]>([]);
   const [sshkeys, setSSHKeys] = useState<SSHKeys[]>([]);
+  const [installVSCodeServer, setInstallVSCodeServer] = useState(false);
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState<{ [key: string]: string | null }>({});
   
@@ -262,7 +264,18 @@ export default function CreateVMPage() {
           <p className="text-xs text-muted-foreground">
           This key will be used for authentication to ensure a safe connection.
           </p>
-        </div> 
+        </div>
+        <div className="items-top flex space-x-2">
+          <Checkbox id="vscode"/>
+          <div className="grid gap-1.5 leading-none">
+            <label
+              htmlFor="vscode"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Install VSCode Server
+            </label>
+          </div>
+        </div>
       </div>
       {!canSubmit ? (
         <Button disabled size="sm">

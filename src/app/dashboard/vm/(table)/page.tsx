@@ -9,6 +9,8 @@ import { Separator } from "@/components/ui/separator";
 import useTableColumns, { VirtualMachine } from "./columns";
 import { usePathname } from "next/navigation";
 import { io } from "socket.io-client";
+import { RotateCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const socket = io(process.env.NEXT_PUBLIC_API_BASE_URL, { withCredentials: true });
 
@@ -24,6 +26,7 @@ export default function Page() {
 
   // Function to fetch VM data from the API
   const fetchVMData = async () => {
+    setLoading(true);
     try {
       const response = await userVm();
       setVMData(response.data || []);
@@ -61,24 +64,22 @@ export default function Page() {
 
   useEffect(() => {
     // Socket event listeners
-    socket.on("connect", () => {
+    const handleConnect = () => {
       console.log("Connected to Socket.IO server.");
-    });
-
-    socket.on("task_status", (newStatus) => {
+    };
+  
+    const handleTaskStatus = (newStatus: any) => {
       console.log("Task status updated:", newStatus);
       handleSocketUpdate(newStatus);
-    });
-
-    socket.on("disconnect", () => {
-      console.warn("Disconnected from Socket.IO server.");
-    });
-
+    };
+  
+    socket.on("connect", handleConnect);
+    socket.on("task_status", handleTaskStatus);
+  
+    // Cleanup function
     return () => {
-      socket.off("connect");
-      socket.off("task_status");
-      socket.off("disconnect");
-      socket.disconnect();
+      socket.off("connect", handleConnect);
+      socket.off("task_status", handleTaskStatus);
     };
   }, []);
 
@@ -89,15 +90,7 @@ export default function Page() {
   return (
     <div className="h-full flex-1 flex-col space-y-2 p-8 md:flex">
       <div className="overflow-x-auto">
-        {loading ? (
-          <div className="flex justify-center items-center py-4">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-blue-500"></div>
-          </div>
-        ) : error ? (
-          <div className="text-red-500 py-4">{error}</div>
-        ) : (
-          <DataTable data={mergedVMData} columns={columns} />
-        )}
+      <DataTable data={mergedVMData} columns={columns} fetchVMData={fetchVMData} loading={loading} error={error}/>
       </div>
       <Separator className="my-3" />
       <NavigationTabs selectedRow={selectedRow} />

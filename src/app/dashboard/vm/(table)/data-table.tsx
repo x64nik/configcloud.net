@@ -23,6 +23,8 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Loader2, Plus, RotateCw } from "lucide-react";
+
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -32,7 +34,14 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
-}: DataTableProps<TData, TValue>) {
+  fetchVMData,
+  loading,
+  error,
+}: DataTableProps<TData, TValue> & { 
+  fetchVMData: () => Promise<void> 
+  loading: boolean;
+  error: string | null;
+  }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -57,7 +66,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="auto-rows-min md:grid-cols-1">
-      <div className="space-y-3 ">
+      <div className="space-y-2">
         <div className="flex items-center">
           <Input
             placeholder="Filter Machine Name..."
@@ -67,9 +76,12 @@ export function DataTable<TData, TValue>({
             }
             className="w-full sm:w-[300px] md:w-[400px] lg:w-[500px]"
           />
-            <Link href={"/dashboard/vm/create"} className="ml-auto">
-              <Button variant="outline" >Create +</Button>
-            </Link>
+          <div className="flex ml-auto gap-2">
+            <Button variant="outline" onClick={fetchVMData}><RotateCw /></Button>
+            <Link href={"/dashboard/vm/create"}>
+              <Button variant="outline" >Create<Plus /></Button>
+            </Link> 
+          </div>
         </div>
         {/* Table Container */}
         <div className="overflow-auto rounded-lg border bg-card text-card-foreground shadow">
@@ -94,39 +106,54 @@ export function DataTable<TData, TValue>({
               ))}
             </TableHeader>
             <TableBody>
-              {table.getRowModel().rows?.length ? (
+            {loading ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 px-4 py-2 text-center">
+                  <div className="flex justify-center items-center py-4">
+                    <Loader2 className="animate-spin text-blue-500" />
+                    <span className="text-center text-muted-foreground">Loading...</span>
+                  </div>
+                </TableCell>
+              </TableRow>
+              ) : error ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 px-4 py-2 text-center text-red-500"
+                  >
+                    <div className="flex flex-col items-center">
+                      <span className="font-medium">Error fetching Virtual Machines <br/>{error}</span>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ) : table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
                   <TableRow
                     key={row.id}
-                    className="hover:bg-muted/50 data-[state=selected]:bg-muted"
-                  >
+                    className="hover:bg-muted/50 data-[state=selected]:bg-muted">
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell
-                        key={cell.id}
-                        className="px-4 py-2 text-sm"
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
+                      <TableCell key={cell.id} className="px-4 py-2 text-sm">
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCell>
                     ))}
                   </TableRow>
                 ))
               ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 px-4 py-2 text-center text-muted-foreground"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 px-4 py-2 text-center text-muted-foreground"
+                >
+                  No Virtual Machines.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+
           </Table>
         </div>
-
         {/* Pagination Controls */}
         <div className="flex items-center justify-between">
           <div className="text-sm text-muted-foreground">

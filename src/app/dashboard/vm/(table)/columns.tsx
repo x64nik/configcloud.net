@@ -14,6 +14,8 @@ import {
 import { Checkbox } from "@/components/ui/checkbox"
 import { vmDelete, vmState } from "@/api/vmActions"
 import { toast } from "sonner"
+import VSCodeButton from "@/components/vs-code-icon"
+import VSCodeIcon from "@/components/vs-code-icon"
 
 
 export type VirtualMachine = {
@@ -25,6 +27,7 @@ export type VirtualMachine = {
   disk: string
   ip: string
   storage: string
+  instance_type: string
 }
 
 
@@ -110,7 +113,17 @@ const columns: ColumnDef<VirtualMachine>[] = [
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          <p className="font-semibold">Status</p> 
+          <ChevronsUpDown/>
+        </Button>
+      )
+    },
     cell: ({ row }) => {
       const type = row.getValue("status"); // Retrieve the status value
       return (
@@ -150,6 +163,13 @@ const columns: ColumnDef<VirtualMachine>[] = [
  
       return (
         <div className="flex gap-4">
+
+          <Button variant="outline" 
+            className="h-8 w-8 p-0" 
+            size="icon"
+            disabled={vm.status === "pending" || vm.status === "stopped" || vm.status === "available" || vm.status === "unavailable"}>
+            <VSCodeIcon/>
+          </Button>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
