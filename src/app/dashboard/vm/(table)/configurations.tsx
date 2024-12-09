@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { CheckCircle2, ClockIcon, Copy, XCircle } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 // Main Component
 export default function ConfigurationsContent({ selectedVM }: { selectedVM?: VirtualMachine }) {
@@ -25,62 +26,81 @@ export default function ConfigurationsContent({ selectedVM }: { selectedVM?: Vir
         <h2 className="text-2xl font-bold mb-4">Configuration</h2>
         <Separator />
         <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+          {selectedVM ? (
+            <>
+              {/* Left Column */}
+              <div className="space-y-6">
+                <InfoRow label="Machine Name" value={getValueOrDash(selectedVM?.vm_name)} />
+                <InfoRow
+                  label="Username"
+                  value={getValueOrDash(selectedVM?.ip)}
+                  copyable
+                  onCopy={() => copyToClipboard(selectedVM?.ip || "-", "vm-ip")}
+                  copied={copiedField === "vm-ip"}
+                />
+                <InfoRow
+                  label="Password"
+                  value={getValueOrDash(selectedVM?.ip)}
+                  copyable
+                  onCopy={() => copyToClipboard(selectedVM?.ip || "-", "vm-ip")}
+                  copied={copiedField === "vm-ip"}
+                />
+                <InfoRow
+                  label="SSH Key"
+                  value={getValueOrDash(selectedVM?.storage)}
+                />
+              </div>
 
-          {/* Left Column */}
-          <div className="space-y-6">
-            <InfoRow label="Machine Name" value={getValueOrDash(selectedVM?.vm_name)} />
-            <InfoRow
-              label="Username"
-              value={getValueOrDash(selectedVM?.ip)}
-              copyable
-              onCopy={() => copyToClipboard(selectedVM?.ip || "-", "vm-ip")}
-              copied={copiedField === "vm-ip"}
-            />
-            <InfoRow
-              label="Password"
-              value={getValueOrDash(selectedVM?.ip)}
-              copyable
-              onCopy={() => copyToClipboard(selectedVM?.ip || "-", "vm-ip")}
-              copied={copiedField === "vm-ip"}
-            />            
-          </div>
+              {/* Mid Column */}
+              <div className="space-y-6">
+                <InfoRow
+                  label="Instance Type"
+                  value={selectedVM?.instance_type ? `${selectedVM.instance_type}` : "-"}
+                />
+                <InfoRow
+                  label="CPU Cores"
+                  value={selectedVM?.cpu ? `${selectedVM.cpu} vCPU` : "-"}
+                />
+                <InfoRow
+                  label="Memory"
+                  value={selectedVM?.cpu ? `${selectedVM.cpu} vCPU` : "-"}
+                />
+                <InfoRow
+                  label="Storage Type"
+                  value={getValueOrDash(selectedVM?.storage)}
+                />
+              </div>
 
-          {/* mid Column */}
-          <div className="space-y-6">
-          <InfoRow label="Instance Type" value={selectedVM?.instance_type ? `${selectedVM.instance_type}` : "-"} />
-            <InfoRow label="CPU Cores" value={selectedVM?.cpu ? `${selectedVM.cpu} vCPU` : "-"} />
-            <InfoRow label="Memory" value={selectedVM?.cpu ? `${selectedVM.cpu} vCPU` : "-"} />
-            <InfoRow
-              label="Storage Type"
-              value={getValueOrDash(selectedVM?.storage)}
-            />
-          </div>
-
-          {/* right column */}
-          <div className="space-y-6">
-            <InfoRow label="Public Hostname" value={selectedVM?.cpu ? `${selectedVM.cpu} vCPU` : "-"} />
-            <InfoRow
-              label="PrivateIP"
-              value={getValueOrDash(selectedVM?.ip)}
-              copyable
-              onCopy={() => copyToClipboard(selectedVM?.ip || "-", "vm-ip")}
-              copied={copiedField === "vm-ip"}
-            />
-            <InfoRow
-              label="Bandwidth"
-              value={getValueOrDash(selectedVM?.storage)}
-            />
-            <InfoRow
-              label="SSH Key"
-              value={getValueOrDash(selectedVM?.storage)}
-            />
-          </div>
-          
+              {/* Right Column */}
+              <div className="space-y-6">
+                <InfoRow
+                  label="Public Hostname"
+                  value={selectedVM?.cpu ? `${selectedVM.cpu} vCPU` : "-"}
+                />
+                <InfoRow
+                  label="Private IP"
+                  value={getValueOrDash(selectedVM?.ip)}
+                  copyable
+                  onCopy={() => copyToClipboard(selectedVM?.ip || "-", "vm-ip")}
+                  copied={copiedField === "vm-ip"}
+                />
+                <InfoRow
+                  label="Bandwidth"
+                  value={getValueOrDash(selectedVM?.storage)}
+                />
+              </div>
+            </>
+          ) : (
+            <div className="col-span-3 flex justify-center items-center h-full">
+              <p className="p-2 text-sm align-middle h-24 py-10 text-center text-muted-foreground">No Virtual Machine selected</p>
+            </div>
+          )}
         </div>
       </Card>
     </div>
   );
 }
+
 
 // InfoRow Component
 interface InfoRowProps {

@@ -110,8 +110,8 @@ export function DataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 px-4 py-2 text-center">
-                  <div className="flex justify-center items-center py-4">
+                  className="h-12 px-4 py-2 text-sm">
+                  <div className="flex justify-center items-center">
                     <Loader2 className="animate-spin text-blue-500" />
                     <span className="text-center text-muted-foreground">Loading...</span>
                   </div>
@@ -144,7 +144,7 @@ export function DataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 px-4 py-2 text-center text-muted-foreground"
+                  className="h-12 px-4 py-2 text-center text-muted-foreground"
                 >
                   No Virtual Machines.
                 </TableCell>

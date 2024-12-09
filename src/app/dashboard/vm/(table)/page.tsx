@@ -85,6 +85,7 @@ export default function Page() {
 
   useEffect(() => {
     fetchVMData();
+    console.log(pathname);
   }, [pathname]);
 
   return (

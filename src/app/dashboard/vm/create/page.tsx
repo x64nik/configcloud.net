@@ -147,9 +147,9 @@ export default function CreateVMPage() {
     } finally {
       console.log("going back to vm table")
     }
-    router.push('/dashboard/vm');    
+    router.push('/dashboard/vm');
   }
-
+  
   return (
     <div className="space-y-6 p-4 md:p-6 lg:p-8 max-w-2xl">
       <div>
