@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { userInfo } from "@/api/userInfo";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type UserInfo = {
   creation_date: string;
@@ -19,6 +20,7 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        
         const response = await userInfo();
         setData(response.data);
       } catch (error) {
@@ -46,7 +48,7 @@ export default function DashboardPage() {
         ) : error ? (
           <p className="text-red-500">Failed to load user data.</p>
         ) : (
-          <p>Loading user data...</p>
+          <Skeleton className="w-[100px] h-[20px] rounded-full" />
         )}
       </div>
     </div>

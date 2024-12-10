@@ -18,7 +18,7 @@ export default function ConfigurationsContent({ selectedVM }: { selectedVM?: Vir
     setTimeout(() => setCopiedField(null), 2000);
   };
 
-  const getValueOrDash = (value: string | undefined) => value ?? "-";
+  const getValueOrDash = (value: string | undefined) => value ?? "–";
 
   return (
     <div>
@@ -26,7 +26,7 @@ export default function ConfigurationsContent({ selectedVM }: { selectedVM?: Vir
         <h2 className="text-2xl font-bold mb-4">Configuration</h2>
         <Separator />
         <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-          {selectedVM ? (
+          {  /* selectedVM ? */ (
             <>
               {/* Left Column */}
               <div className="space-y-6">
@@ -35,14 +35,14 @@ export default function ConfigurationsContent({ selectedVM }: { selectedVM?: Vir
                   label="Username"
                   value={getValueOrDash(selectedVM?.ip)}
                   copyable
-                  onCopy={() => copyToClipboard(selectedVM?.ip || "-", "vm-ip")}
+                  onCopy={() => copyToClipboard(selectedVM?.ip || "–", "vm-ip")}
                   copied={copiedField === "vm-ip"}
                 />
                 <InfoRow
                   label="Password"
                   value={getValueOrDash(selectedVM?.ip)}
                   copyable
-                  onCopy={() => copyToClipboard(selectedVM?.ip || "-", "vm-ip")}
+                  onCopy={() => copyToClipboard(selectedVM?.ip || "–", "vm-ip")}
                   copied={copiedField === "vm-ip"}
                 />
                 <InfoRow
@@ -50,20 +50,19 @@ export default function ConfigurationsContent({ selectedVM }: { selectedVM?: Vir
                   value={getValueOrDash(selectedVM?.storage)}
                 />
               </div>
-
               {/* Mid Column */}
               <div className="space-y-6">
                 <InfoRow
                   label="Instance Type"
-                  value={selectedVM?.instance_type ? `${selectedVM.instance_type}` : "-"}
+                  value={selectedVM?.instance_type ? `${selectedVM.instance_type}` : "–"}
                 />
                 <InfoRow
                   label="CPU Cores"
-                  value={selectedVM?.cpu ? `${selectedVM.cpu} vCPU` : "-"}
+                  value={selectedVM?.cpu ? `${selectedVM.cpu} vCPU` : "–"}
                 />
                 <InfoRow
                   label="Memory"
-                  value={selectedVM?.cpu ? `${selectedVM.cpu} vCPU` : "-"}
+                  value={selectedVM?.cpu ? `${selectedVM.cpu} vCPU` : "–"}
                 />
                 <InfoRow
                   label="Storage Type"
@@ -75,13 +74,13 @@ export default function ConfigurationsContent({ selectedVM }: { selectedVM?: Vir
               <div className="space-y-6">
                 <InfoRow
                   label="Public Hostname"
-                  value={selectedVM?.cpu ? `${selectedVM.cpu} vCPU` : "-"}
+                  value={selectedVM?.cpu ? `${selectedVM.cpu} vCPU` : "–"}
                 />
                 <InfoRow
                   label="Private IP"
                   value={getValueOrDash(selectedVM?.ip)}
                   copyable
-                  onCopy={() => copyToClipboard(selectedVM?.ip || "-", "vm-ip")}
+                  onCopy={() => copyToClipboard(selectedVM?.ip || "–", "vm-ip")}
                   copied={copiedField === "vm-ip"}
                 />
                 <InfoRow
@@ -90,11 +89,13 @@ export default function ConfigurationsContent({ selectedVM }: { selectedVM?: Vir
                 />
               </div>
             </>
-          ) : (
-            <div className="col-span-3 flex justify-center items-center h-full">
-              <p className="p-2 text-sm align-middle h-24 py-10 text-center text-muted-foreground">No Virtual Machine selected</p>
-            </div>
-          )}
+          ) 
+          // : (
+          //   <div className="col-span-3 flex justify-center items-center h-full">
+          //     <p className="p-2 text-sm align-middle h-24 py-10 text-center text-muted-foreground">No Virtual Machine selected</p>
+          //   </div>
+          // )
+          }
         </div>
       </Card>
     </div>
@@ -159,7 +160,7 @@ function InfoRow({ label, value, valueClass, copyable, onCopy, copied, isStatus,
         ) : (
           <span className={`text-sm text-white ${valueClass || ""}`}>{value}</span>
         )}
-        {copyable && value !== "-" && (
+        {copyable && value !== "–" && (
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

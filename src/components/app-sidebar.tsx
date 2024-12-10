@@ -21,6 +21,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { Skeleton } from "./ui/skeleton"
+import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar"
 
 // This is sample data.
 const data = {
@@ -91,7 +93,7 @@ export function AppSidebar({ user, onLogout, ...props }: {
       {user ? (
           <NavUser user={user} onLogout={onLogout} />
         ) : (
-          <p className="px-4 py-2 text-sm text-muted-foreground">
+          <p className="flex px-4 py-2 text-sm text-muted-foreground">
             Loading user info...
           </p>
         )}
