@@ -19,6 +19,10 @@ import VSCodeIcon from "@/components/vs-code-icon"
 
 
 export type VirtualMachine = {
+  username: string
+  password: string
+  keypair: string
+  bandwidth: string
   vm_id: string
   vm_name: string
   status: string
@@ -26,6 +30,7 @@ export type VirtualMachine = {
   cpu: number
   disk: string
   ip: string
+  hostname: string
   storage: string
   instance_type: string
 }

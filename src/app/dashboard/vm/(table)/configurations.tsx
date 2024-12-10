@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { CheckCircle2, ClockIcon, Copy, XCircle } from "lucide-react";
+import { CheckCircle2, ClockIcon, Copy, SquareArrowOutUpRight, XCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 // Main Component
@@ -26,28 +26,31 @@ export default function ConfigurationsContent({ selectedVM }: { selectedVM?: Vir
         <h2 className="text-2xl font-bold mb-4">Configuration</h2>
         <Separator />
         <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-          {  /* selectedVM ? */ (
+          {selectedVM ? (
             <>
               {/* Left Column */}
               <div className="space-y-6">
                 <InfoRow label="Machine Name" value={getValueOrDash(selectedVM?.vm_name)} />
                 <InfoRow
                   label="Username"
-                  value={getValueOrDash(selectedVM?.ip)}
+                  value={getValueOrDash(selectedVM?.username)}
                   copyable
-                  onCopy={() => copyToClipboard(selectedVM?.ip || "–", "vm-ip")}
-                  copied={copiedField === "vm-ip"}
+                  onCopy={() => copyToClipboard(selectedVM?.username || "–", "username")}
+                  copied={copiedField === "username"}
                 />
                 <InfoRow
                   label="Password"
-                  value={getValueOrDash(selectedVM?.ip)}
+                  value="•••••••"
                   copyable
-                  onCopy={() => copyToClipboard(selectedVM?.ip || "–", "vm-ip")}
-                  copied={copiedField === "vm-ip"}
+                  onCopy={() => copyToClipboard(selectedVM?.password || "–", "password")}
+                  copied={copiedField === "password"}
+                  isHidden
                 />
                 <InfoRow
                   label="SSH Key"
-                  value={getValueOrDash(selectedVM?.storage)}
+                  value={getValueOrDash(selectedVM?.keypair)}
+                  isLink
+                  link={`/dashboard/sshkeys`}
                 />
               </div>
               {/* Mid Column */}
@@ -62,19 +65,20 @@ export default function ConfigurationsContent({ selectedVM }: { selectedVM?: Vir
                 />
                 <InfoRow
                   label="Memory"
-                  value={selectedVM?.cpu ? `${selectedVM.cpu} vCPU` : "–"}
+                  value={selectedVM?.memory ? `${selectedVM.memory} GB` : "–"}
                 />
                 <InfoRow
                   label="Storage Type"
                   value={getValueOrDash(selectedVM?.storage)}
                 />
               </div>
-
               {/* Right Column */}
               <div className="space-y-6">
                 <InfoRow
                   label="Public Hostname"
-                  value={selectedVM?.cpu ? `${selectedVM.cpu} vCPU` : "–"}
+                  value={selectedVM?.hostname || "–"}
+                  isLink
+                  link={`https://${selectedVM?.hostname}`}
                 />
                 <InfoRow
                   label="Private IP"
@@ -85,25 +89,24 @@ export default function ConfigurationsContent({ selectedVM }: { selectedVM?: Vir
                 />
                 <InfoRow
                   label="Bandwidth"
-                  value={getValueOrDash(selectedVM?.storage)}
+                  value={getValueOrDash(selectedVM?.bandwidth)}
                 />
               </div>
             </>
-          ) 
-          // : (
-          //   <div className="col-span-3 flex justify-center items-center h-full">
-          //     <p className="p-2 text-sm align-middle h-24 py-10 text-center text-muted-foreground">No Virtual Machine selected</p>
-          //   </div>
-          // )
-          }
+          ) : (
+            <div className="col-span-3 flex justify-center items-center h-full">
+              <p className="p-2 text-sm align-middle h-24 py-10 text-center text-muted-foreground">
+                No Virtual Machine selected
+              </p>
+            </div>
+          )}
         </div>
       </Card>
     </div>
   );
 }
 
-
-// InfoRow Component
+// Updated InfoRow Component
 interface InfoRowProps {
   label: string;
   value: string;
@@ -111,54 +114,40 @@ interface InfoRowProps {
   copyable?: boolean;
   onCopy?: () => void;
   copied?: boolean;
-  isStatus?: boolean;
-  statusType?: string;
+  isLink?: boolean;
+  link?: string;
+  isHidden?: boolean;
 }
 
-function InfoRow({ label, value, valueClass, copyable, onCopy, copied, isStatus, statusType }: InfoRowProps) {
-  
-  // Function to determine icon color
-  const getIconColor = (statusType: string | undefined) => {
-    if (!statusType) return "text-gray-400";
-
-    return statusType === "available"
-      ? "text-blue-500"
-      : statusType === "pending"
-      ? "text-yellow-500"
-      : statusType === "running"
-      ? "text-green-500"
-      : statusType === "stopped"
-      ? "text-red-500"
-      : "text-gray-400";
-  };
-
-  const renderStatusIcon = (statusType: string | undefined) => {
-    switch (statusType) {
-      case "available":
-        return <CheckCircle2 className={`h-5 w-4 ${getIconColor(statusType)}`} /> ;
-      case "pending":
-        return <ClockIcon className={`h-5 w-4 ${getIconColor(statusType)}`} />;
-      case "stopped":
-        return <XCircle className={`h-5 w-4 ${getIconColor(statusType)}`} />;
-        case "running":
-          return <CheckCircle2 className={`h-5 w-4 ${getIconColor(statusType)}`} />;
-      default:
-        return <span className="text-gray-400">-</span>;
-    }
-  };
-
+function InfoRow({
+  label,
+  value,
+  valueClass,
+  copyable,
+  onCopy,
+  copied,
+  isLink,
+  link,
+  isHidden,
+}: InfoRowProps) {
   return (
     <div className="flex flex-col">
-      {/* Label */}
       <Label className="text-gray-700 font-semibold text-sm">{label}</Label>
-      {/* Value with Icon */}
-      <div className="flex items-center space-x-1">
-        {isStatus ? (
-          <div className="flex items-center">
-            {renderStatusIcon(statusType)}<p className={`text-sm px-1 ${getIconColor(statusType)}`}>{statusType}</p>
-          </div>
+      <div className="flex items-center space-x-2">
+        {isLink ? (
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:underline flex items-center text-sm hover:text-blue-400"
+          >
+          {value}
+          <SquareArrowOutUpRight className="ml-1 h-4 w-4 hover:text-blue-400"/>
+          </a>
         ) : (
-          <span className={`text-sm text-white ${valueClass || ""}`}>{value}</span>
+          <span className={`text-sm ${valueClass || ""}`}>
+            {isHidden ? "•••••••" : value}
+          </span>
         )}
         {copyable && value !== "–" && (
           <TooltipProvider>
@@ -168,7 +157,7 @@ function InfoRow({ label, value, valueClass, copyable, onCopy, copied, isStatus,
                   variant="ghost"
                   size="sm"
                   onClick={onCopy}
-                  className="h-6 w-6 text-white hover:text-gray-300"
+                  className="h-6 w-6 text-gray-500 hover:text-gray-700"
                 >
                   <Copy className="h-4 w-4" />
                 </Button>
@@ -183,3 +172,4 @@ function InfoRow({ label, value, valueClass, copyable, onCopy, copied, isStatus,
     </div>
   );
 }
+
