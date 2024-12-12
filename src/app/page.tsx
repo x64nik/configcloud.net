@@ -8,15 +8,15 @@ import LoginPage from "./(auth)/login/page";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-black/[0.97] antialiased">
-      {/* <Navbar />
+    <main className="min-h-screen bg-black/[0.8] antialiased">
+      <Navbar />
       <HeroSection/>
       <Services />
-      <Info /> */}
+      <Info />
       {/* <Testimonials /> */}
       {/* <AboutSection/> */}
 
-      <LoginPage/>
+      {/* <LoginPage/> */}
 
     </main>
   );
