@@ -104,7 +104,7 @@ export function AreaChartInteractive({
             <SelectItem value="live" className="rounded-lg">
               Live
             </SelectItem>
-            <SelectItem value="7d" className="rounded-lg">
+            <SelectItem value="7d" defaultChecked className="rounded-lg">
               Last 7 days
             </SelectItem>
           </SelectContent>

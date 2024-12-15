@@ -1,4 +1,4 @@
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { VirtualMachine } from "./columns";
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
@@ -21,10 +21,17 @@ export default function ConfigurationsContent({ selectedVM }: { selectedVM?: Vir
   const getValueOrDash = (value: string | undefined) => value ?? "–";
 
   return (
-    <div>
-      <Card className="p-6">
-        <h2 className="text-2xl font-bold mb-4">Configuration</h2>
-        <Separator />
+    <Card>
+      <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
+        <div className="grid flex-1 gap-1 text-center sm:text-left">
+          <CardTitle>Configuration</CardTitle>
+          <CardDescription>
+            Showing Virtual Machine's Details
+          </CardDescription>
+        </div>
+      </CardHeader>
+      <div>
+        <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
           {selectedVM ? (
             <>
@@ -101,8 +108,9 @@ export default function ConfigurationsContent({ selectedVM }: { selectedVM?: Vir
             </div>
           )}
         </div>
-      </Card>
-    </div>
+        </CardContent>
+      </div>
+    </Card>
   );
 }
 
@@ -131,6 +139,7 @@ function InfoRow({
   isHidden,
 }: InfoRowProps) {
   return (
+
     <div className="flex flex-col">
       <Label className="text-gray-700 font-semibold text-sm">{label}</Label>
       <div className="flex items-center space-x-2">
