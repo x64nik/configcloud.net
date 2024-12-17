@@ -5,9 +5,10 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/utils/cn";
 import { Toaster, toast } from 'sonner'
-import { login } from '@/api/Login'; // Import the API request function
+import { login, socialLogin } from '@/api/Login'; // Import the API request function
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import { IconBrandGithub, IconBrandGoogle, IconBrandOnlyfans } from "@tabler/icons-react";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -38,10 +39,21 @@ export default function LoginPage() {
         
         } finally {
           setLoading(false);
-        }
-              
+        }    
     };
     
+    const githubLogin = async (event: any) => {
+      console.log(event.target.value);
+      setLoading(true);
+      try {
+        socialLogin(event.target.value);
+      } catch (error) {
+        console.error("Error during social login:", error);
+      } finally {
+        setLoading(false);
+      }
+
+    };
 
 
     return (
@@ -64,7 +76,7 @@ export default function LoginPage() {
                 <Input id="password" placeholder="••••••••" type="password" required value={user.password} onChange={(e) => setUser({...user, password: e.target.value})}/>
             </LabelInputContainer>
             <Button
-                className="flex items-center justify-center bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600  dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+                className="flex mb-2 items-center justify-center bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600  dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
                 type="submit"
                 disabled={loading}>
                 {loading ? (
@@ -80,9 +92,21 @@ export default function LoginPage() {
             Dont have an account?
             <a href="/signup" className="text-blue-600 dark:text-blue-400 underline ml-1">Sign Up!</a> 
             </div>
-
             </form>
+            <Button variant="outline" className="w-full" 
+              onClick={githubLogin} 
+              value="github"
+              disabled={loading}>
+              {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <span>Loading...</span>
+                  </> 
+                ) : ("Login with Github")}
+              <BottomGradient />
+            </Button>
         </div>
+        
         </div>
       );
     }

@@ -12,6 +12,12 @@ export const login = async (data: LoginData) => {
   return response; // Return backend response, could be user info or auth token
 };
 
+export const socialLogin = (provider: string) => {
+  const backendUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+  // Perform a full redirect to your backend
+  window.location.href = `${backendUrl}/auth/login/${provider}`;
+};
+
 export const logout = async () => {
   const response = await apiClient.post('/auth/logout');
   return response;

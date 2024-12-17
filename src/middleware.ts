@@ -10,6 +10,7 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/login', req.url));
   }
 
+
   // Proceed to the requested page if authenticated
   return NextResponse.next();
 }
