@@ -33,6 +33,9 @@ export type VirtualMachine = {
   hostname: string
   storage: string
   instance_type: string
+  distro: string
+  os_kernel_version: string
+  os_version: string
 }
 
 

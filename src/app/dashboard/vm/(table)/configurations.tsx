@@ -95,9 +95,17 @@ export default function ConfigurationsContent({ selectedVM }: { selectedVM?: Vir
                   copied={copiedField === "vm-ip"}
                 />
                 <InfoRow
+                  label="Operating System"
+                  value={`${getValueOrDash(selectedVM?.distro)}-${getValueOrDash(selectedVM?.os_version)}`}
+                />
+                <InfoRow
+                  label="Kernel Version"
+                  value={getValueOrDash(selectedVM?.os_kernel_version)}
+                />
+                {/* <InfoRow
                   label="Bandwidth"
                   value={getValueOrDash(selectedVM?.bandwidth)}
-                />
+                /> */}
               </div>
             </>
           ) : (
