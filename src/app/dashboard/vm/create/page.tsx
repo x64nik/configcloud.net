@@ -47,6 +47,8 @@ export default function CreateVMPage() {
     username: undefined as string | undefined,
   });
 
+  
+
   const canSubmit = Boolean(vmData.vm_name && vmData.distro && vmData.instance_type && vmData.keypair);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {

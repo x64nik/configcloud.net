@@ -27,3 +27,23 @@ export const createVm = async (vmMetadata: vmData): Promise<any> => {
     const response = await apiClient.post("/vm/create", vmMetadata);
     return response;
 };
+
+export const netRules = async(vm_id: string) => {
+  const response = await apiClient.get(`/networks/rules/${vm_id}`)
+  return response
+}
+
+
+type netRuleData = {
+  vm_id: string
+  protocol: string
+  subdomain: string
+  domain: string
+  internal_ip: string
+  internal_port: number
+}
+
+export const addNetRule = async(netRuleData: netRuleData) => {
+  const response = await apiClient.post("/networks/rules/create", netRuleData)
+  return response
+}
