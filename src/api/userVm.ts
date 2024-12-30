@@ -33,6 +33,10 @@ export const netRules = async(vm_id: string) => {
   return response
 }
 
+export const netRulesAll = async() => {
+  const response = await apiClient.get(`/networks/rules/list`)
+  return response
+}
 
 type netRuleData = {
   vm_id: string
@@ -47,3 +51,11 @@ export const addNetRule = async(netRuleData: netRuleData) => {
   const response = await apiClient.post("/networks/rules/create", netRuleData)
   return response
 }
+
+
+export const removeNetRule = async(vm_id: string, subdomain: string) => {
+  const response = await apiClient.delete(`/networks/rules/delete/${vm_id}/${subdomain}`)
+  return response
+}
+
+
