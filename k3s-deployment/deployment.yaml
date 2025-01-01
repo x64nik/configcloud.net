@@ -20,9 +20,6 @@ spec:
         image: registry.gitlab.com/my-homelab-stuff/cc-frontend:latest
         ports:
         - containerPort: 3000
-        env:
-        - configMapRef:
-            name: frontend-config
       imagePullSecrets:
       - name: gitlab-registry-credentials
 
