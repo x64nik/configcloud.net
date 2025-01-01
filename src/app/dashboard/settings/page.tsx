@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { createVm } from "@/api/userVm";
 
-const socket = io("http://localhost:5000", { withCredentials: true });
+// const socket = io("http://localhost:5000", { withCredentials: true });
 
 const SettingsPage = () => {
   const [taskId, setTaskId] = useState<string | null>(null);
@@ -25,15 +25,15 @@ const SettingsPage = () => {
 
   useEffect(() => {
     // Connect to the socket on mount
-    socket.on("connect", () => {
-      console.log("Connected to Socket.IO server.");
-    });
+    // socket.on("connect", () => {
+    //   console.log("Connected to Socket.IO server.");
+    // });
 
     // Listen for task status updates
-    socket.on("task_status", (data) => {
-      console.log("Task Status Update:", data);
-      setStatus(data.status);
-    });
+    // socket.on("task_status", (data) => {
+    //   console.log("Task Status Update:", data);
+    //   setStatus(data.status);
+    // });
 
     // return () => {
     //   socket.disconnect(); // Cleanup on unmount
@@ -50,7 +50,7 @@ const SettingsPage = () => {
       setStatus(`Task submitted! Task ID: ${data}`);
 
       // Request task status from the backend
-      socket.emit('get_task_status', data);
+      // socket.emit('get_task_status', data);
 
     } catch (error) {
       setStatus("Error submitting task.");
