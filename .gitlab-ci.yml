@@ -1,0 +1,43 @@
+stages:
+  - build
+
+default:
+  tags:
+    - k3s
+
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "prod"
+    - if: $CI_COMMIT_BRANCH == "dev"
+
+build_prod:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:v1.23.2-debug
+    entrypoint: [""]
+  before_script:
+    - cp $PROD_ENV_FILE .env
+  script:
+    - /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
+      --destination "${CI_REGISTRY_IMAGE}:prod"
+      --cache=true
+  rules:
+    - if: $CI_COMMIT_BRANCH == "prod"
+
+build_dev:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:v1.23.2-debug
+    entrypoint: [""]
+  before_script:
+    - cp $DEV_ENV_FILE .env
+  script:
+    - /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
+      --destination "${CI_REGISTRY_IMAGE}:dev"
+      --cache=true
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev"

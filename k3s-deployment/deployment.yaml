@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cc-frontend
+  namespace: configcloud
+  labels:
+    app: cc-frontend
+spec:
+  selector:
+    matchLabels:
+      app: cc-frontend
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: cc-frontend
+    spec:
+      containers:
+      - name: cc-frontend
+        image: registry.gitlab.com/my-homelab-stuff/cc-frontend:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - configMapRef:
+            name: frontend-config
+      imagePullSecrets:
+      - name: gitlab-registry-credentials
+
+        
