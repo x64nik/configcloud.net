@@ -43,12 +43,17 @@ type netRuleData = {
   protocol: string
   subdomain: string
   domain: string
-  internal_ip: string
   internal_port: number
 }
 
-export const addNetRule = async(netRuleData: netRuleData) => {
-  const response = await apiClient.post("/networks/rules/create", netRuleData)
+export const addNetRule = async(vm_id: string, protocol: string, subdomain: string, internal_port: string) => {
+  const data = {
+    vm_id: vm_id, 
+    protocol: protocol, 
+    subdomain: subdomain, 
+    internal_port: internal_port
+  }
+  const response = await apiClient.post("/networks/rules/create", data)
   return response
 }
 

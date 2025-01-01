@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { userInfo } from "@/api/userInfo";
 import { Skeleton } from "@/components/ui/skeleton";
 
-type UserInfo = {
+export interface UserInfo {
   creation_date: string;
   email: string;
   user_uuid: string;
