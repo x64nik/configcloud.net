@@ -43,7 +43,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const handleLogout = async () => {
     try {
       await logout();
-      // socket.disconnect();
       console.log("socket disconnected.")
       window.location.href = "/login"; // Redirect to login after logout
     } catch (error) {

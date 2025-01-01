@@ -78,7 +78,7 @@ export function DataTable<TData, TValue>({
           />
           <div className="flex ml-auto gap-2">
             <Button variant="outline" onClick={fetchVMData}><RotateCw /></Button>
-            <Link href={"/dashboard/vm/create"}>
+            <Link href={"/dashboard/vm/create-vm"}>
               <Button variant="outline" >Create<Plus /></Button>
             </Link> 
           </div>
