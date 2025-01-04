@@ -38,11 +38,11 @@ const chartData = [
 ]
 const chartConfig = {
   desktop: {
-    label: "Desktop",
+    label: "CPU",
     color: "hsl(var(--chart-1))",
   },
   mobile: {
-    label: "Mobile",
+    label: "Memory",
     color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig
@@ -115,11 +115,11 @@ export function AreaChartInteractive({
           <ChartContainer
             config={{
               desktop: {
-                label: "Desktop",
+                label: "CPU",
                 color: "hsl(var(--chart-1))",
               },
               mobile: {
-                label: "Mobile",
+                label: "Memory",
                 color: "hsl(var(--chart-2))",
               }
             }}

@@ -53,7 +53,7 @@ export const addNetRule = async(vm_id: string, protocol: string, subdomain: stri
     subdomain: subdomain, 
     internal_port: internal_port
   }
-  const response = await apiClient.post("/networks/rules/create", data)
+  const response: any = await apiClient.post("/networks/rules/create", data)
   return response
 }
 

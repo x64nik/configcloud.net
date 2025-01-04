@@ -46,19 +46,17 @@ export default function ConfigurationsContent({ selectedVM }: { selectedVM?: Vir
                   copied={copiedField === "username"}
                 />
                 <InfoRow
+                  label="SSH Key"
+                  value={`${getValueOrDash(selectedVM?.keypair)} - default pair`}
+                />
+                {/* <InfoRow
                   label="Password"
                   value="•••••••"
                   copyable
                   onCopy={() => copyToClipboard(selectedVM?.password || "–", "password")}
                   copied={copiedField === "password"}
                   isHidden
-                />
-                <InfoRow
-                  label="SSH Key"
-                  value={getValueOrDash(selectedVM?.keypair)}
-                  isLink
-                  link={`/dashboard/sshkeys`}
-                />
+                /> */}
               </div>
               {/* Mid Column */}
               <div className="space-y-6">
@@ -66,7 +64,7 @@ export default function ConfigurationsContent({ selectedVM }: { selectedVM?: Vir
                   label="Instance Type"
                   value={selectedVM?.instance_type ? `${selectedVM.instance_type}` : "–"}
                 />
-                <InfoRow
+                {/* <InfoRow
                   label="CPU Cores"
                   value={selectedVM?.cpu ? `${selectedVM.cpu} vCPU` : "–"}
                 />
@@ -77,6 +75,14 @@ export default function ConfigurationsContent({ selectedVM }: { selectedVM?: Vir
                 <InfoRow
                   label="Storage Type"
                   value={getValueOrDash(selectedVM?.storage)}
+                /> */}
+                <InfoRow
+                  label="Operating System"
+                  value={`${getValueOrDash(selectedVM?.distro)}-${getValueOrDash(selectedVM?.os_version)}`}
+                />
+                <InfoRow
+                  label="Kernel Version"
+                  value={getValueOrDash(selectedVM?.os_kernel_version)}
                 />
               </div>
               {/* Right Column */}
@@ -85,7 +91,7 @@ export default function ConfigurationsContent({ selectedVM }: { selectedVM?: Vir
                   label="Public Hostname"
                   value={selectedVM?.hostname || "–"}
                   isLink
-                  link={`https://${selectedVM?.hostname}`}
+                  link={`http://${selectedVM?.hostname}`}
                 />
                 <InfoRow
                   label="Private IP"
@@ -95,17 +101,9 @@ export default function ConfigurationsContent({ selectedVM }: { selectedVM?: Vir
                   copied={copiedField === "vm-ip"}
                 />
                 <InfoRow
-                  label="Operating System"
-                  value={`${getValueOrDash(selectedVM?.distro)}-${getValueOrDash(selectedVM?.os_version)}`}
-                />
-                <InfoRow
-                  label="Kernel Version"
-                  value={getValueOrDash(selectedVM?.os_kernel_version)}
-                />
-                {/* <InfoRow
                   label="Bandwidth"
-                  value={getValueOrDash(selectedVM?.bandwidth)}
-                /> */}
+                  value="45Mbps"
+                />
               </div>
             </>
           ) : (

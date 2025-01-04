@@ -1,7 +1,7 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { SettingsIcon, ChevronsUpDown, Trash2,Ban, Play, RotateCcw } from "lucide-react"
+import { SettingsIcon, ChevronsUpDown, Trash2,Ban, Play, RotateCcw, SquareTerminal, Terminal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -16,6 +16,7 @@ import { vmDelete, vmState } from "@/api/vmActions"
 import { toast } from "sonner"
 import VSCodeButton from "@/components/vs-code-icon"
 import VSCodeIcon from "@/components/vs-code-icon"
+import SSHGuideDialog from "./ssh-connect-dialog"
 
 
 export type VirtualMachine = {
@@ -64,6 +65,8 @@ const useTableColumns = ({setSelectedRow} : {setSelectedRow : React.Dispatch<Rea
       console.log("delete final")
     }
   }
+
+
   
 const columns: ColumnDef<VirtualMachine>[] = [
   
@@ -172,12 +175,17 @@ const columns: ColumnDef<VirtualMachine>[] = [
       return (
         <div className="flex gap-4">
 
-          <Button variant="outline" 
+          {/* <Button variant="outline" 
             className="h-8 w-8 p-0" 
             size="icon"
             disabled={vm.status === "pending" || vm.status === "stopped" || vm.status === "available" || vm.status === "unavailable"}>
-            <VSCodeIcon/>
-          </Button>
+          </Button> */}
+
+          {/* $VCONN=<username>@<machine_id>.configcloud.net; ssh -o ProxyCommand='cloudflared access ssh --hostname $VCONN' $VCONN -i <private_key>.pem */}
+
+          
+
+          <SSHGuideDialog ssh_command={`ssh -o ProxyCommand='cloudflared access ssh --hostname ssh-${vm.vm_id.toLowerCase()}-access.configcloud.net' ${vm.username}@ssh-${vm.vm_id.toLowerCase()}-access.configcloud.net -i ~/Downloads/${vm.keypair}_private_key.pem`} />
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

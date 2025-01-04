@@ -12,21 +12,16 @@ apiClient.interceptors.response.use(
     return response.data;
   },
   (error) => {
-    // Handle different types of errors
+    // Check if there's a response from the server
     if (error.response) {
-      // The request was made, and the server responded with a status code
-      console.log('Error response:', error.response);
-      const status = error.response.status;
-      const errorMessage = error.response.data.message || error.message;
-      return Promise.reject(new Error(`${errorMessage}`));
+      // Reject with the backend's full response data as it is
+      return Promise.reject(error.response.data);
     } else if (error.request) {
-      // The request was made but no response was received
-      console.log('Error request:', error.request);
-      return Promise.reject(new Error('No response from server. Please try again later.'));
+      // Reject with a custom message for network errors
+      return Promise.reject({ message: 'No response from server. Please try again later.' });
     } else {
-      // Something happened in setting up the request that triggered an Error
-      console.log('Error message:', error.message);
-      return Promise.reject(new Error('An unexpected error occurred.')); // Catch-all for unexpected errors
+      // Reject with a general unexpected error message
+      return Promise.reject({ message: 'An unexpected error occurred.' });
     }
   }
 );

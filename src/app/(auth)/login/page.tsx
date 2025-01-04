@@ -32,7 +32,7 @@ export default function LoginPage() {
 
         console.log("Login Success", response);
         toast.success("Login Success");
-        router.push("/dashboard");
+        router.push("/dashboard/vm");
  
       } catch (error) {
 
@@ -46,15 +46,15 @@ export default function LoginPage() {
     
     const githubLogin = async (event: any) => {
       console.log(event.target.value);
-      setLoading(true);
-      try {
-        socialLogin(event.target.value);
-      } catch (error) {
-        console.error("Error during social login:", error);
-      } finally {
-        setLoading(false);
-      }
-
+      // setLoading(true);
+      // try {
+      //   socialLogin(event.target.value);
+      // } catch (error) {
+      //   console.error("Error during social login:", error);
+      // } finally {
+      //   setLoading(false);
+      // }
+      toast.message("Signups are disabled for now!")
     };
 
 

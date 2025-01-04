@@ -180,12 +180,28 @@ export default function CreateNetworkingRules() {
   };
 
   async function createRule() {
+    setLoading(true);
     try {
       const response = await addNetRule(ruleData.vm_id, ruleData.protocol, ruleData.subdomain, ruleData.internal_port)
       console.log(response)
-      router.push('/dashboard/vm');
-    } catch(err) {
-      toast.error("err")
+      toast.success(`${response.data.message}`)
+
+      setRuleData({
+        ...ruleData,
+        vm_id: "",
+        internal_port: "",
+        subdomain: "",
+        domain: "",
+        protocol: "",
+        tls: false,
+        httpToHttps: false,
+      });
+
+    } catch(err: any) {
+      console.log(err)
+      toast.error(`Failed to create Rule: ${err.data.message}`)
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -265,7 +281,7 @@ export default function CreateNetworkingRules() {
                 disabled={!selectedVm}
               >
                 <SelectTrigger id="protocol">
-                  <SelectValue placeholder="HTTP" />
+                  <SelectValue/>
                 </SelectTrigger>
                 <SelectContent position="popper">
                   {protocols.map((protocol) => (
