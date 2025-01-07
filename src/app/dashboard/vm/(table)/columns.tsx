@@ -16,8 +16,6 @@ import { vmDelete, vmState } from "@/api/vmActions"
 import { toast } from "sonner"
 import VSCodeButton from "@/components/vs-code-icon"
 import VSCodeIcon from "@/components/vs-code-icon"
-import SSHGuideDialog from "./ssh-connect-dialog"
-
 
 export type VirtualMachine = {
   username: string
@@ -182,10 +180,6 @@ const columns: ColumnDef<VirtualMachine>[] = [
           </Button> */}
 
           {/* $VCONN=<username>@<machine_id>.configcloud.net; ssh -o ProxyCommand='cloudflared access ssh --hostname $VCONN' $VCONN -i <private_key>.pem */}
-
-          
-
-          <SSHGuideDialog ssh_command={`ssh -o ProxyCommand='cloudflared access ssh --hostname ssh-${vm.vm_id.toLowerCase()}-access.configcloud.net' ${vm.username}@ssh-${vm.vm_id.toLowerCase()}-access.configcloud.net -i ~/Downloads/${vm.keypair}_private_key.pem`} />
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

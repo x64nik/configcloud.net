@@ -49,14 +49,6 @@ export default function ConfigurationsContent({ selectedVM }: { selectedVM?: Vir
                   label="SSH Key"
                   value={`${getValueOrDash(selectedVM?.keypair)} - default pair`}
                 />
-                {/* <InfoRow
-                  label="Password"
-                  value="•••••••"
-                  copyable
-                  onCopy={() => copyToClipboard(selectedVM?.password || "–", "password")}
-                  copied={copiedField === "password"}
-                  isHidden
-                /> */}
               </div>
               {/* Mid Column */}
               <div className="space-y-6">

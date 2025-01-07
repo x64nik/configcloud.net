@@ -10,6 +10,11 @@ export const userSSHKeys = async () => {
   return response;
 };
 
+export const deleteSSHKey = async (keyName: string): Promise<any> => {
+  const response = await apiClient.delete(`/keygen/delete/${keyName}`);
+  return response;
+};
+
 
 export const createSSHKey = async (keyName: string): Promise<any> => {
   const response = await apiClient.post("/keygen/generate_key", {"keypair_name": keyName}, { responseType: "blob" });

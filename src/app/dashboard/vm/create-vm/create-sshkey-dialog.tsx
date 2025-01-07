@@ -17,19 +17,41 @@ import { Eye, EyeOff, KeyRound, Loader2, Plus } from "lucide-react";
 import { createSSHKey } from "@/api/userVm";
 import { toast } from "sonner";
 
-
 interface CreateSSHKeyDialogProps {
   fetchSSHKeys: () => Promise<void>; // Prop to fetch SSH keys
 }
 
 export function CreateSSHKeyDialog({ fetchSSHKeys }: CreateSSHKeyDialogProps) {
   const [keyName, setKeyName] = useState<string>(""); // Renamed state for consistency
-
   const [isOpen, setIsOpen] = useState(false); // Manage dialog open state
   const [errors, setErrors] = useState<{ [key: string]: string | null }>({});
   const [loading, setLoading] = useState(false); // Initially false since no operation is happening
 
+  const validateKeyName = (name: string) => {
+    const errors: string[] = [];
+    const regex = /^[a-zA-Z0-9_]+$/; // Only alphanumeric characters are allowed
+    if (!name.match(regex)) {
+      errors.push("Key name should only contain letters and numbers.");
+    }
+    if (name.length < 5 || name.length > 18) {
+      errors.push("Key name must be between 5 and 18 characters.");
+    }
+    if (name.startsWith("_") || name.endsWith("_")) {
+      errors.push("Key name cannot start or end with an underscore.");
+    }
+    if (!name.match(/^[a-zA-Z]/)) {
+      errors.push("Key name must start with a letter.");
+    }
+    return errors;
+  };
+
   async function handleSubmit() {
+    const validationErrors = validateKeyName(keyName);
+    if (validationErrors.length > 0) {
+      setErrors({ sshkey: validationErrors.join(" ") });
+      return;
+    }
+
     setLoading(true); // Set loading to true when operation begins
 
     try {
@@ -59,7 +81,7 @@ export function CreateSSHKeyDialog({ fetchSSHKeys }: CreateSSHKeyDialogProps) {
     setIsOpen(false); // Close the dialog
   }
 
-  const isFormValid = Boolean(keyName);
+  const isFormValid = Boolean(keyName) && Object.keys(errors).length === 0;
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => {
@@ -67,8 +89,8 @@ export function CreateSSHKeyDialog({ fetchSSHKeys }: CreateSSHKeyDialogProps) {
       setIsOpen(open);
     }}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" onClick={() => setIsOpen(true)}>
-          <KeyRound />
+        <Button variant="outline" size="default" onClick={() => setIsOpen(true)}>
+          <Plus /> Create
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -87,12 +109,22 @@ export function CreateSSHKeyDialog({ fetchSSHKeys }: CreateSSHKeyDialogProps) {
               id="keyName"
               className="flex-1"
               value={keyName}
-              onChange={(e) => setKeyName(e.target.value)} // Update input value
+              onChange={(e) => {
+                setKeyName(e.target.value); // Update input value
+                const validationErrors = validateKeyName(e.target.value);
+                if (validationErrors.length > 0) {
+                  setErrors({ sshkey: validationErrors.join(" ") });
+                } else {
+                  setErrors({});
+                }
+              }}
             />
+            {errors.sshkey && (
+              <p className="text-red-500 text-sm">{errors.sshkey}</p>
+            )}
             <DialogDescription className="text-xs">
-            This SSH key is generated only once and not stored. Please download it now, as it won't be available later. The download will start automatically.
-          </DialogDescription>
-
+              This SSH key is generated only once and not stored. Please download it now, as it won't be available later. The download will start automatically.
+            </DialogDescription>
           </div>
         </div>
         <DialogFooter>

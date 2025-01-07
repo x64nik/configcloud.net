@@ -1,32 +1,16 @@
 // app/dashboard/vm/page.tsx
-"use client"
-
-import { userInfo } from "@/api/userInfo";
-import { userVm } from "@/api/userVm";
-import { useEffect } from "react";
-import { toast } from "sonner";
-
+import { SshKeyManager } from "./ssh-key-manager"
 
 export default function SSHKeysPage() {
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await userVm();
-  //       console.log(response)
-  //     } catch (error) {
-  //       toast.error(`Failed to fetch user info: ${error}`);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-
     return (
-      <div className="p-4">
-        <h1 className="text-xl font-semibold">SSH Keys</h1>
-        <p>Manage your SSH Keys here</p>
+      <div className="space-y-6 p-4 md:p-6 lg:p-8 max-w-full">
+        <div>
+          <h1 className="text-xl font-semibold tracking-tight">SSH Keys</h1>
+          <p className="text-sm text-muted-foreground">
+          Create and Manage your ssh keys 
+          </p>
+        </div>
+        <SshKeyManager />
       </div>
     );
   }
-  

@@ -27,7 +27,7 @@ type Instance = {
 }
 
 type SSHKeys = {
-  name: string;
+  key_name: string;
 }
 
 export default function CreateVMPage() {
@@ -252,10 +252,10 @@ export default function CreateVMPage() {
               {!loading &&
                 sshkeys.map((sshkey) => (
                   <SelectItem
-                    key={`${sshkey}`}                 
-                    value={`${sshkey}`}
+                    key={`${sshkey.key_name}`}                 
+                    value={`${sshkey.key_name}`}
                   >
-                    {`${sshkey}`}
+                    {`${sshkey.key_name}`}
                   </SelectItem>
                 ))}
             </SelectContent>
