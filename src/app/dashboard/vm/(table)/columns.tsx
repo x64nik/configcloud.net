@@ -16,6 +16,8 @@ import { vmDelete, vmState } from "@/api/vmActions"
 import { toast } from "sonner"
 import VSCodeButton from "@/components/vs-code-icon"
 import VSCodeIcon from "@/components/vs-code-icon"
+import { ConfirmationDialog } from "@/components/confirm-delete"
+import { useState } from "react"
 
 export type VirtualMachine = {
   username: string
@@ -39,6 +41,8 @@ export type VirtualMachine = {
 
 
 const useTableColumns = ({setSelectedRow} : {setSelectedRow : React.Dispatch<React.SetStateAction<VirtualMachine | undefined>>}) => {
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false)
+  const [vmToDelete, setVMToDelete] = useState<string | null>(null)
 
   async function vmActions(vm_id: string, action: string) {
     try {
@@ -52,15 +56,17 @@ const useTableColumns = ({setSelectedRow} : {setSelectedRow : React.Dispatch<Rea
     }
   }
 
-  async function DeleteVM (vm_id: string) {
+  async function DeleteVM(vm_id: string) {
+    if (!vm_id) return;  // Ensure vm_id is present before proceeding
     try {
-      const response = await vmDelete(vm_id)
-      console.log(response)
+      // Assuming this is a function to delete the VM
+      const response = await vmDelete(vm_id);
+      console.log(response.data);
+      toast.info("VM deletion process is in queue");
+      setConfirmDialogOpen(false); // Close the dialog after successful deletion
     } catch (err) {
-      console.log(`error while deleting  vm: ${vm_id}`)
-    } 
-    finally {
-      console.log("delete final")
+      console.error(`Error while deleting VM: ${vm_id}`);
+      toast.error("Error deleting VM");
     }
   }
 
@@ -211,16 +217,26 @@ const columns: ColumnDef<VirtualMachine>[] = [
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-
-          <Button 
-            variant="destructive" 
-            className="h-8 w-8 p-0" 
-            size="icon"
-            disabled={vm.status == "running" || vm.status === "pending" || vm.status === "unavailable"}
-            onClick={() => DeleteVM(vm.vm_id)}
+          <div>
+            <ConfirmationDialog
+              open={confirmDialogOpen}
+              onClose={() => setConfirmDialogOpen(false)}
+              onConfirm={() => DeleteVM(vmToDelete!)} // Pass the VM id on confirm
+              message="Are you sure you want to delete this VM?"
+            />
+            <Button
+              variant="destructive"
+              className="h-8 w-8 p-0"
+              size="icon"
+              disabled={vm.status == "running" || vm.status === "pending" || vm.status === "unavailable"}
+              onClick={() => {
+                setVMToDelete(vm.vm_id);
+                setConfirmDialogOpen(true);
+              }}
             >
-            <Trash2/>
-          </Button>
+              <Trash2 />
+            </Button>
+          </div>
         </div>
       )
     },

@@ -30,6 +30,7 @@ import { netRules, netRulesAll, removeNetRule } from "@/api/userVm";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type NetworkingRules = {
   internal_ip: string;
@@ -41,6 +42,7 @@ type NetworkingRules = {
 };
 
 export default function NetworkingContent({ selectedVM }: { selectedVM?: VirtualMachine }) {
+  const router = useRouter();
   const [allnetrules, setNetworkingRules] = useState<NetworkingRules[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -72,9 +74,13 @@ export default function NetworkingContent({ selectedVM }: { selectedVM?: Virtual
             Showing Virtual Machine's Networking Details
           </CardDescription>
         </div>
-        <Link href={"/dashboard/vm/networking"}>
-          <Button variant="outline" >Expose a service<Plus /></Button>
-        </Link> 
+          <Button 
+            variant="outline" 
+            disabled={!selectedVM}
+            onClick={() => selectedVM && router.push("/dashboard/vm/networking")}
+          >
+            Expose a service<Plus />
+          </Button> 
       </CardHeader>  
       
       <CardContent className="px-2 pt-4 sm:px-3 sm:pt-2">

@@ -246,7 +246,7 @@ export default function CreateNetworkingRules() {
                   <SelectValue placeholder="Select your VM" />
                 </SelectTrigger>
                 <SelectContent position="popper">
-                  {vmdata.map((vm) => (
+                  {vmdata?.map((vm) => (
                     <SelectItem key={vm.vm_id} value={vm.vm_id}>
                       {vm.ip} - {vm.vm_name}
                     </SelectItem>

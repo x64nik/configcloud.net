@@ -13,7 +13,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal, Plus, Upload } from 'lucide-react'
+import { ArrowUpDown, ChevronDown, MoreHorizontal, Plus, RotateCw, Upload } from 'lucide-react'
 
 import { Button } from "@/components/ui/button"
 import {
@@ -40,6 +40,7 @@ import { useEffect, useState } from "react"
 import { deleteSSHKey, userSSHKeys } from "@/api/userVm"
 import { toast } from "sonner"
 import { CreateSSHKeyDialog } from "../vm/create-vm/create-sshkey-dialog"
+import { ConfirmationDialog } from "@/components/confirm-delete"
 
 export function SshKeyManager() {
   const [data, setSSHKeys] =  useState<SSHKey[]>([])
@@ -47,6 +48,9 @@ export function SshKeyManager() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
+
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false)
+  const [keyToDelete, setKeyToDelete] = useState<string | null>(null)
 
   const columns: ColumnDef<SSHKey>[] = [
         {
@@ -93,20 +97,32 @@ export function SshKeyManager() {
             const sshKey = row.original
     
             return (
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                    <span className="sr-only">Open menu</span>
-                    <MoreHorizontal className="h-4 w-4" />
-                </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem onClick={() => handelDeleteSSHKey(sshKey.key_name)}>
-                    Delete
-                </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
+              <div>
+                <ConfirmationDialog
+                  open={confirmDialogOpen}
+                  onClose={() => setConfirmDialogOpen(false)}
+                  onConfirm={() => handelDeleteSSHKey(keyToDelete!)}
+                  message="Are you sure you want to delete this SSH key?"
+                />
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-8 w-8 p-0">
+                      <span className="sr-only">Open menu</span>
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                    {/* When "Delete" is clicked, set the key and open the dialog */}
+                    <DropdownMenuItem onClick={() => {
+                      setKeyToDelete(sshKey.key_name);
+                      setConfirmDialogOpen(true);
+                    }}>
+                      Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             )
         },
         },
@@ -132,13 +148,15 @@ export function SshKeyManager() {
   })
 
   async function handelDeleteSSHKey(key_name: string) {
+    if (!keyToDelete) return
     //   setLoading(true);
     try {
       const response = await deleteSSHKey(key_name);
-      console.log(response.status)
-      if (response.status === 200) {
+      console.log(response.data)
+      if (response.data === 'deleted') {
         setSSHKeys((presshKeys) => presshKeys.filter((key) => key.key_name !== key_name));
         toast.success("Key successfully deleted!");
+        setConfirmDialogOpen(false);
         return;
       }
     } catch (err) {
@@ -176,7 +194,8 @@ export function SshKeyManager() {
           }
           className="max-w-sm"
         />
-        <div className="ml-auto">
+        <div className="flex ml-auto gap-2">
+        <Button variant="outline" onClick={loadSSHKeys}><RotateCw /></Button>
         <CreateSSHKeyDialog fetchSSHKeys={loadSSHKeys}/>
         </div>
         <Button disabled variant="secondary" className="ml-2">
