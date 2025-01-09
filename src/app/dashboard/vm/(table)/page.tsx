@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { DataTable } from "./data-table";
-import { userVm } from "@/api/userVm";
+import { netRulesAll, userVm } from "@/api/userVm";
 import { toast } from "sonner";
 import { NavigationTabs } from "./navigation-panel";
 import { Separator } from "@/components/ui/separator";
@@ -94,7 +94,7 @@ export default function Page() {
       <DataTable data={mergedVMData} columns={columns} fetchVMData={fetchVMData} loading={loading} error={error}/>
       </div>
       <Separator className="my-3" />
-      <NavigationTabs selectedRow={selectedRow} />
+      <NavigationTabs selectedRow={selectedRow} loading={loading}/>
     </div>
   );
 }

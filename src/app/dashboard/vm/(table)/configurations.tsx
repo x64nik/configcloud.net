@@ -5,11 +5,18 @@ import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { CheckCircle2, ClockIcon, Copy, SquareArrowOutUpRight, XCircle } from "lucide-react";
+import { CheckCircle2, ClockIcon, Copy, Loader2, SquareArrowOutUpRight, XCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { TableCell, TableRow } from "@/components/ui/table";
 
 // Main Component
-export default function ConfigurationsContent({ selectedVM }: { selectedVM?: VirtualMachine }) {
+export default function ConfigurationsContent({ 
+  selectedVM,
+  loading 
+  }: { 
+    selectedVM?: VirtualMachine,
+    loading: boolean 
+  }) {
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
   const copyToClipboard = (text: string, field: string) => {
@@ -33,7 +40,13 @@ export default function ConfigurationsContent({ selectedVM }: { selectedVM?: Vir
       <div>
         <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-          {selectedVM ? (
+          {loading ? (
+                <div className="col-span-3  flex justify-center items-center h-24">
+                  <Loader2 className="animate-spin text-blue-500" />
+                  <span className="text-center text-sm text-muted-foreground">Loading...</span>
+                </div>
+              ): 
+          selectedVM ? (
             <>
               {/* Left Column */}
               <div className="space-y-6">

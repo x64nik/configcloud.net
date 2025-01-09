@@ -25,12 +25,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { MoreHorizontal, Plus } from "lucide-react";
+import { MoreHorizontal, Plus, RotateCw } from "lucide-react";
 import { netRules, netRulesAll, removeNetRule } from "@/api/userVm";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { ConfirmationDialog } from "@/components/confirm-delete"
 
 type NetworkingRules = {
   internal_ip: string;
@@ -41,29 +41,51 @@ type NetworkingRules = {
   vm_id: string;
 };
 
-export default function NetworkingContent({ selectedVM }: { selectedVM?: VirtualMachine }) {
+export default function NetworkingContent({ 
+    selectedVM,
+  }: { 
+    selectedVM?: VirtualMachine,
+  }) {
   const router = useRouter();
   const [allnetrules, setNetworkingRules] = useState<NetworkingRules[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false)
+  const [ruleToDelete, setruleToDelete] = useState<string | null>(null)
 
-  const fetchNetRules = async (vm_id: string) => {
-      try {
-        const response = await netRules(vm_id);
-        setNetworkingRules(response.data);
-      } catch (err) {
-        toast.error(`Failed to fetch net rules: ${err}`);
-      } finally {
-        setLoading(false);
+  const fetchAllNetRules = async () => {
+    setLoading(true);
+    try {
+      const response = await netRulesAll();
+      setNetworkingRules(response.data);
+      console.log(allnetrules)
+      setLoading(false);
+    } catch (err) {
+      toast.error(`Failed to fetch net rules: ${err}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handelDeleteNetRules = async (vm_id: string, subdomain: string) => {
+    if (!ruleToDelete) return
+    try {
+      const response = await removeNetRule(vm_id, subdomain);
+      if (response.data === 'deleted') {
+        setNetworkingRules((preNetworkingRules) => preNetworkingRules.filter((rule) => rule.subdomain !== subdomain));
+        toast.success("Rule deleted!");
+        setConfirmDialogOpen(false);
+        return;
       }
+    } catch (err) {
+      toast.error(`Failed to delete rule: ${err}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    if (selectedVM?.vm_id){
-      fetchNetRules(selectedVM.vm_id);
-    }
-  }, [selectedVM]);
-
-
+    fetchAllNetRules();
+  }, []);
 
   return (
     <Card>
@@ -74,6 +96,7 @@ export default function NetworkingContent({ selectedVM }: { selectedVM?: Virtual
             Showing Virtual Machine's Networking Details
           </CardDescription>
         </div>
+          <Button variant="outline" onClick={fetchAllNetRules}><RotateCw /></Button>
           <Button 
             variant="outline" 
             disabled={!selectedVM}
@@ -97,8 +120,8 @@ export default function NetworkingContent({ selectedVM }: { selectedVM?: Virtual
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {loading ? (
-                  <TableRow>
+              {loading ? (
+                <TableRow>
                   <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
                     <div className="flex justify-center items-center">
                       <Loader2 className="animate-spin text-blue-500" />
@@ -106,9 +129,11 @@ export default function NetworkingContent({ selectedVM }: { selectedVM?: Virtual
                     </div>
                   </TableCell>
                 </TableRow>
-                ) : selectedVM ? (
-                  allnetrules?.length ? (
-                    allnetrules.map((netrule) => (
+              ) : selectedVM ? (
+                allnetrules.filter((netrule) => netrule.vm_id === selectedVM.vm_id).length ? (
+                  allnetrules
+                    .filter((netrule) => netrule.vm_id === selectedVM.vm_id) // Filter rules for the selected VM
+                    .map((netrule: any) => (
                       <TableRow key={netrule?.subdomain}>
                         <TableCell className="font-medium">{netrule?.protocol.toLocaleUpperCase()}</TableCell>
                         <TableCell>{netrule?.protocol}</TableCell>
@@ -127,6 +152,12 @@ export default function NetworkingContent({ selectedVM }: { selectedVM?: Virtual
                           {netrule?.protocol + "://" + netrule?.internal_ip + ":" + netrule?.internal_port}
                         </TableCell>
                         <TableCell className="text-center">
+                          <ConfirmationDialog
+                            open={confirmDialogOpen}
+                            onClose={() => setConfirmDialogOpen(false)}
+                            onConfirm={() => handelDeleteNetRules(selectedVM.vm_id, netrule.subdomain)}
+                            message="Are you sure you want to delete this SSH key?"
+                          />
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <Button
@@ -138,28 +169,32 @@ export default function NetworkingContent({ selectedVM }: { selectedVM?: Virtual
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" forceMount>
-                              <DropdownMenuItem>Edit</DropdownMenuItem>
-                              <DropdownMenuItem>Delete</DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => {
+                                setruleToDelete(netrule.subdomain);
+                                setConfirmDialogOpen(true);
+                              }}>
+                                Delete
+                              </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </TableCell>
                       </TableRow>
                     ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
-                        No forwarding rule for this VM
-                      </TableCell>
-                    </TableRow>
-                  )
                 ) : (
                   <TableRow>
+                    <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
+                      No forwarding rule for this VM
+                    </TableCell>
+                  </TableRow>
+                )
+              ) : (
+                <TableRow>
                   <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
                     Select a VM to see networking rules
                   </TableCell>
                 </TableRow>
-                )}
-              </TableBody>
+              )}
+            </TableBody>    
             </Table>
           </>
       </CardContent>

@@ -13,7 +13,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal, Plus, RotateCw, Upload } from 'lucide-react'
+import { ArrowUpDown, ChevronDown, Loader2, MoreHorizontal, Plus, RotateCw, Upload } from 'lucide-react'
 
 import { Button } from "@/components/ui/button"
 import {
@@ -48,6 +48,9 @@ export function SshKeyManager() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
+
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false)
   const [keyToDelete, setKeyToDelete] = useState<string | null>(null)
@@ -170,12 +173,13 @@ export function SshKeyManager() {
     try {
       const response = await userSSHKeys();
       setSSHKeys(response.data || []);
+      setLoading(false)
     } catch (err) {
-    //   setErrors((prev) => ({ ...prev, sshkeys: "Error fetching SSH keys" }));
-      toast.error(`Failed to fetch SSH keys: ${err}`);
+        setError("Error fetching SSH Keys!");
+        toast.error(`Failed to fetch SSH keys: ${err}`);
     } finally {
-    //   setLoading(false);
-    console.log(data)
+        setLoading(false);
+        console.log(data)
     }
   }
 
@@ -223,7 +227,29 @@ export function SshKeyManager() {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+          {loading ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-12 px-4 py-2 text-sm">
+                  <div className="flex justify-center items-center">
+                    <Loader2 className="animate-spin text-blue-500" />
+                    <span className="text-center text-muted-foreground">Loading...</span>
+                  </div>
+                </TableCell>
+              </TableRow>
+              ) : error ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 px-4 py-2 text-center text-red-500"
+                  >
+                    <div className="flex flex-col items-center">
+                      <span className="font-medium">Error fetching Virtual Machines <br/>{error}</span>
+                    </div>
+                  </TableCell>
+                </TableRow>
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}

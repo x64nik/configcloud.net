@@ -9,7 +9,14 @@ import MonitoringContent from "./MonitoringContent"
 import NetworkingContent from "./networking"
 import { VirtualMachine } from "./columns"
 
-export function NavigationTabs({selectedRow} : {selectedRow : VirtualMachine | undefined}) {
+export function NavigationTabs({
+    selectedRow,
+    loading
+
+  } : {
+    selectedRow : VirtualMachine | undefined,
+    loading: boolean
+  }) {
 
   return (
     <Tabs defaultValue="configurations" className="w-full">
@@ -22,7 +29,7 @@ export function NavigationTabs({selectedRow} : {selectedRow : VirtualMachine | u
       </div>
       <div className="w-full">
       <TabsContent value="configurations">
-        <ConfigurationsContent selectedVM={selectedRow}/>
+        <ConfigurationsContent selectedVM={selectedRow} loading={loading}/>
       </TabsContent>
       </div>
       <div className="w-full">
