@@ -96,7 +96,13 @@ export default function NetworkingContent({
             Showing Virtual Machine's Networking Details
           </CardDescription>
         </div>
-          <Button variant="outline" onClick={fetchAllNetRules}><RotateCw /></Button>
+          <Button 
+            variant="outline" 
+            onClick={fetchAllNetRules}
+            disabled={!selectedVM}
+          >
+              <RotateCw />
+          </Button>
           <Button 
             variant="outline" 
             disabled={!selectedVM}
@@ -109,92 +115,83 @@ export default function NetworkingContent({
       <CardContent className="px-2 pt-4 sm:px-3 sm:pt-2">
           <>
             <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[100px] font-semibold">Protocol</TableHead>
-                  <TableHead className="font-semibold">Status</TableHead>
-                  <TableHead className="font-semibold">Uptime</TableHead>
-                  <TableHead className="font-semibold">Public Hostname</TableHead>
-                  <TableHead className="text-start font-semibold">Internal Service</TableHead>
-                  <TableHead className="text-center font-semibold">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-              {loading ? (
-                <TableRow>
-                  <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
-                    <div className="flex justify-center items-center">
-                      <Loader2 className="animate-spin text-blue-500" />
-                      <span className="text-center text-muted-foreground">Loading...</span>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ) : selectedVM ? (
-                allnetrules.filter((netrule) => netrule.vm_id === selectedVM.vm_id).length ? (
-                  allnetrules
-                    .filter((netrule) => netrule.vm_id === selectedVM.vm_id) // Filter rules for the selected VM
-                    .map((netrule: any) => (
-                      <TableRow key={netrule?.subdomain}>
-                        <TableCell className="font-medium">{netrule?.protocol.toLocaleUpperCase()}</TableCell>
-                        <TableCell>{netrule?.protocol}</TableCell>
-                        <TableCell>{netrule?.protocol}</TableCell>
-                        <TableCell>
-                          <a
-                            href={netrule?.protocol + "://" + netrule?.svc_public_domain}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline flex items-center font-semibold text-sm hover:text-blue-400"
-                          >
-                            {netrule?.svc_public_domain}
-                          </a>
-                        </TableCell>
-                        <TableCell className="text-start">
-                          {netrule?.protocol + "://" + netrule?.internal_ip + ":" + netrule?.internal_port}
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <ConfirmationDialog
-                            open={confirmDialogOpen}
-                            onClose={() => setConfirmDialogOpen(false)}
-                            onConfirm={() => handelDeleteNetRules(selectedVM.vm_id, netrule.subdomain)}
-                            message="Are you sure you want to delete this SSH key?"
-                          />
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="bg-transparent"
-                              >
-                                <MoreHorizontal className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" forceMount>
-                              <DropdownMenuItem onClick={() => {
-                                setruleToDelete(netrule.subdomain);
-                                setConfirmDialogOpen(true);
-                              }}>
-                                Delete
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
-                      No forwarding rule for this VM
-                    </TableCell>
-                  </TableRow>
-                )
+            <TableBody>
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
+                  <div className="flex justify-center items-center">
+                    <Loader2 className="animate-spin text-blue-500" />
+                    <span className="text-center text-muted-foreground">Loading...</span>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : selectedVM ? (
+              Array.isArray(allnetrules) && allnetrules.filter((netrule) => netrule.vm_id === selectedVM.vm_id).length ? (
+                allnetrules
+                  .filter((netrule) => netrule.vm_id === selectedVM.vm_id) // Filter rules for the selected VM
+                  .map((netrule: any) => (
+                    <TableRow key={netrule?.subdomain}>
+                      <TableCell className="font-medium">{netrule?.protocol.toLocaleUpperCase()}</TableCell>
+                      <TableCell>{netrule?.protocol}</TableCell>
+                      <TableCell>{netrule?.protocol}</TableCell>
+                      <TableCell>
+                        <a
+                          href={netrule?.protocol + "://" + netrule?.svc_public_domain}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:underline flex items-center font-semibold text-sm hover:text-blue-400"
+                        >
+                          {netrule?.svc_public_domain}
+                        </a>
+                      </TableCell>
+                      <TableCell className="text-start">
+                        {netrule?.protocol + "://" + netrule?.internal_ip + ":" + netrule?.internal_port}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <ConfirmationDialog
+                          open={confirmDialogOpen}
+                          onClose={() => setConfirmDialogOpen(false)}
+                          onConfirm={() => handelDeleteNetRules(selectedVM.vm_id, netrule.subdomain)}
+                          message="Are you sure you want to delete this SSH key?"
+                        />
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="bg-transparent"
+                            >
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" forceMount>
+                            <DropdownMenuItem onClick={() => {
+                              setruleToDelete(netrule.subdomain);
+                              setConfirmDialogOpen(true);
+                            }}>
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))
               ) : (
                 <TableRow>
                   <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
-                    Select a VM to see networking rules
+                    No forwarding rule for this VM
                   </TableCell>
                 </TableRow>
-              )}
-            </TableBody>    
+              )
+            ) : (
+              <TableRow>
+                <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
+                  Select a VM to see networking rules
+                </TableCell>
+              </TableRow>
+            )}
+            </TableBody>
+
             </Table>
           </>
       </CardContent>
