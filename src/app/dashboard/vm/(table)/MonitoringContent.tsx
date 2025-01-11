@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { io } from "socket.io-client";
 import { data } from "framer-motion/client";
 import { getVMStats } from "@/api/vmMonitoring";
+import { Button } from "@/components/ui/button";
 
 
 const MonitoringContent = ({ selectedVM }: { selectedVM: VirtualMachine | undefined }) => {
@@ -14,12 +15,15 @@ const MonitoringContent = ({ selectedVM }: { selectedVM: VirtualMachine | undefi
 
   const fetchVMStats = async () => {
     if (!selectedVM?.vm_id) {
+      setStatsData([])
       return;
     }
+
     try {
-      const response = await getVMStats("test");
+      const response = await getVMStats(selectedVM.vm_id, "12h");
       setStatsData(response.data);
       console.log(statsData)
+      setCurrentVM(selectedVM.vm_id)
     } catch (err) {
       toast.error(`Failed to fetch stats: ${err}`);
     } finally {
@@ -32,8 +36,7 @@ const MonitoringContent = ({ selectedVM }: { selectedVM: VirtualMachine | undefi
 
   return (
     <div className="grid grid-cols-1 gap-2">
-      {/* <AreaChartInteractive statsData={statsData} selectedVM={selectedVM} /> */}
-      <AreaChartInteractive />
+      <AreaChartInteractive chartData={statsData} fetchVMStats={fetchVMStats}/>
     </div>
   );
 };

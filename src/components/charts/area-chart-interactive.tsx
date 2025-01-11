@@ -25,277 +25,86 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-
-const chartData = [
-  {
-    "cpu_usage_percent": 8.672,
-    "mem_usage_gb": 2.49,
-    "timestamp": "12:09:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.139,
-    "mem_usage_gb": 2.49,
-    "timestamp": "12:10:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.336,
-    "mem_usage_gb": 2.49,
-    "timestamp": "12:11:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.134,
-    "mem_usage_gb": 2.49,
-    "timestamp": "12:12:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.205,
-    "mem_usage_gb": 2.49,
-    "timestamp": "12:13:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.412,
-    "mem_usage_gb": 2.49,
-    "timestamp": "12:14:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.319,
-    "mem_usage_gb": 2.49,
-    "timestamp": "12:15:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.472,
-    "mem_usage_gb": 2.5,
-    "timestamp": "12:16:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.154,
-    "mem_usage_gb": 2.5,
-    "timestamp": "12:17:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.887,
-    "mem_usage_gb": 2.5,
-    "timestamp": "12:18:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.04,
-    "mem_usage_gb": 2.51,
-    "timestamp": "12:19:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.322,
-    "mem_usage_gb": 2.51,
-    "timestamp": "12:20:00 AM"
-  },
-  {
-    "cpu_usage_percent": 8.414,
-    "mem_usage_gb": 2.51,
-    "timestamp": "12:21:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.037,
-    "mem_usage_gb": 2.51,
-    "timestamp": "12:22:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.143,
-    "mem_usage_gb": 2.51,
-    "timestamp": "12:23:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.218,
-    "mem_usage_gb": 2.51,
-    "timestamp": "12:24:00 AM"
-  },
-  {
-    "cpu_usage_percent": 8.993,
-    "mem_usage_gb": 2.51,
-    "timestamp": "12:25:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.259,
-    "mem_usage_gb": 2.51,
-    "timestamp": "12:26:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.038,
-    "mem_usage_gb": 2.51,
-    "timestamp": "12:27:00 AM"
-  },
-  {
-    "cpu_usage_percent": 8.635,
-    "mem_usage_gb": 2.52,
-    "timestamp": "12:28:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.027,
-    "mem_usage_gb": 2.52,
-    "timestamp": "12:29:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.391,
-    "mem_usage_gb": 2.52,
-    "timestamp": "12:30:00 AM"
-  },
-  {
-    "cpu_usage_percent": 8.761,
-    "mem_usage_gb": 2.55,
-    "timestamp": "12:31:00 AM"
-  },
-  {
-    "cpu_usage_percent": 8.896,
-    "mem_usage_gb": 2.55,
-    "timestamp": "12:32:00 AM"
-  },
-  {
-    "cpu_usage_percent": 8.977,
-    "mem_usage_gb": 2.54,
-    "timestamp": "12:33:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.399,
-    "mem_usage_gb": 2.54,
-    "timestamp": "12:34:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.664,
-    "mem_usage_gb": 2.52,
-    "timestamp": "12:35:00 AM"
-  },
-  {
-    "cpu_usage_percent": 8.821,
-    "mem_usage_gb": 2.52,
-    "timestamp": "12:36:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.205,
-    "mem_usage_gb": 2.52,
-    "timestamp": "12:37:00 AM"
-  },
-  {
-    "cpu_usage_percent": 8.787,
-    "mem_usage_gb": 2.52,
-    "timestamp": "12:38:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.13,
-    "mem_usage_gb": 2.51,
-    "timestamp": "12:39:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.521,
-    "mem_usage_gb": 2.51,
-    "timestamp": "12:40:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.305,
-    "mem_usage_gb": 2.51,
-    "timestamp": "12:41:00 AM"
-  },
-  {
-    "cpu_usage_percent": 8.511,
-    "mem_usage_gb": 2.51,
-    "timestamp": "12:42:00 AM"
-  },
-  {
-    "cpu_usage_percent": 8.72,
-    "mem_usage_gb": 2.51,
-    "timestamp": "12:43:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.15,
-    "mem_usage_gb": 2.51,
-    "timestamp": "12:44:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.224,
-    "mem_usage_gb": 2.51,
-    "timestamp": "12:45:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.162,
-    "mem_usage_gb": 2.52,
-    "timestamp": "12:46:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.183,
-    "mem_usage_gb": 2.52,
-    "timestamp": "12:47:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.327,
-    "mem_usage_gb": 2.52,
-    "timestamp": "12:48:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.017,
-    "mem_usage_gb": 2.51,
-    "timestamp": "12:49:00 AM"
-  },
-  {
-    "cpu_usage_percent": 10.958,
-    "mem_usage_gb": 2.52,
-    "timestamp": "12:50:00 AM"
-  },
-  {
-    "cpu_usage_percent": 8.867,
-    "mem_usage_gb": 2.52,
-    "timestamp": "12:51:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.358,
-    "mem_usage_gb": 2.52,
-    "timestamp": "12:52:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.205,
-    "mem_usage_gb": 2.53,
-    "timestamp": "12:53:00 AM"
-  },
-  {
-    "cpu_usage_percent": 9.108,
-    "mem_usage_gb": 2.53,
-    "timestamp": "12:54:00 AM"
-  },
-  // Add more data as needed
-]
+import { useEffect, useState } from "react"
+import { Button } from "../ui/button"
+import { RotateCw } from "lucide-react"
 
 const chartConfig = {
-  cpu_usage_percent: {
-    label: "CPU Usage",
+  visitors: {
+    label: "Visitors",
+  },
+  cpu: {
+    label: "CPU%",
     color: "hsl(var(--chart-1))",
   },
-  mem_usage_gb: {
-    label: "Memory Usage",
+  memory: {
+    label: "RAM%",
     color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig
 
-export function AreaChartInteractive() {
-  const [timeRange, setTimeRange] = React.useState("90d")
+export function AreaChartInteractive({
+    chartData,
+    fetchVMStats
+  } : {
+    chartData: any,
+    fetchVMStats: () => void
+  }) {
 
-  const filteredData = chartData.filter((item) => { 
-    const date = new Date("2024-06-30") // Adjust if needed based on your time filtering logic
-    let hoursToSubtract = 0
-    if (timeRange === "30d") {
-      hoursToSubtract = 30
-    } else if (timeRange === "7d") {
-      hoursToSubtract = 7
+  const [timeRange, setTimeRange] = useState("12h");
+
+  const filteredData = chartData.filter((dataPoint: any) => {
+    const now = new Date(); // Current date and time
+    let hoursToSubtract = 0;
+
+    if (timeRange === "12h") {
+      hoursToSubtract = 12;
+    } else if (timeRange === "6h") {
+      hoursToSubtract = 6;
+    } else if (timeRange === "1h") {
+      hoursToSubtract = 1;
     }
-    const startDate = new Date(date)
-    startDate.setHours(date.getHours() - hoursToSubtract)
-    return date >= startDate
-  })
+
+    // Calculate the start time for the filter
+    const startTime = new Date(now);
+    startTime.setHours(now.getHours() - hoursToSubtract);
+
+    // Parse the `timestamp` field into a full Date object
+    const dataDate = new Date(now); // Use today's date as the base
+    const [time, period] = dataPoint.timestamp.split(" ");
+    const [hours, minutes] = time.split(":");
+    
+    // Adjust hours based on AM/PM
+    let parsedHours = parseInt(hours, 10);
+    if (period === "PM" && parsedHours !== 12) {
+      parsedHours += 12;
+    } else if (period === "AM" && parsedHours === 12) {
+      parsedHours = 0;
+    }
+  
+    // Set the hours and minutes on the dataDate
+    dataDate.setHours(parsedHours, parseInt(minutes, 10), 0, 0);
+
+    // Compare the data timestamp with the start time
+    return dataDate >= startTime;
+  });
 
   return (
     <Card>
       <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
         <div className="grid flex-1 gap-1 text-center sm:text-left">
-          <CardTitle>Area Chart - Interactive</CardTitle>
+          <CardTitle>Resource Usage</CardTitle>
           <CardDescription>
             Showing CPU and Memory usage for the last selected time period
           </CardDescription>
         </div>
+        <Button 
+            variant="outline" 
+            onClick={fetchVMStats}
+            disabled={!chartData}
+          >
+              <RotateCw />
+          </Button>
         <Select value={timeRange} onValueChange={setTimeRange}>
           <SelectTrigger
             className="w-[160px] rounded-lg sm:ml-auto"
@@ -304,14 +113,14 @@ export function AreaChartInteractive() {
             <SelectValue placeholder="Last 3 months" />
           </SelectTrigger>
           <SelectContent className="rounded-xl">
-            <SelectItem value="90d" className="rounded-lg">
-              Last 3 months
+            <SelectItem value="12h" className="rounded-lg">
+              Last 12 hours
             </SelectItem>
-            <SelectItem value="30d" className="rounded-lg">
-              Last 30 days
+            <SelectItem value="6h" className="rounded-lg">
+              Last 6 hours
             </SelectItem>
-            <SelectItem value="7d" className="rounded-lg">
-              Last 7 days
+            <SelectItem value="1h" className="rounded-lg">
+              Last 1 hour
             </SelectItem>
           </SelectContent>
         </Select>
@@ -368,17 +177,17 @@ export function AreaChartInteractive() {
               }
             />
             <Area
-              dataKey="cpu_usage_percent"
+              dataKey="memory"
               type="natural"
-              fill="url(#fillCpu)"
-              stroke="var(--color-cpu)"
-              stackId="a"
+              fill="url(#ffff)"
+              stroke="var(--color-memory)"
+              stackId="b"
             />
             <Area
-              dataKey="mem_usage_gb"
+              dataKey="cpu"
               type="natural"
-              fill="url(#fillMemory)"
-              stroke="var(--color-memory)"
+              fill="url(#ffff)"
+              stroke="var(--color-cpu)"
               stackId="a"
             />
             <ChartLegend content={<ChartLegendContent />} />
