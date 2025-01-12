@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
 
 import {
   Card,
@@ -34,20 +34,22 @@ const chartConfig = {
     label: "Visitors",
   },
   cpu: {
-    label: "CPU%",
+    label: `CPU %`,
     color: "hsl(var(--chart-1))",
   },
   memory: {
-    label: "RAM%",
+    label: "RAM %",
     color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig
 
 export function AreaChartInteractive({
     chartData,
+    isselected,
     fetchVMStats
   } : {
     chartData: any,
+    isselected: boolean,
     fetchVMStats: () => void
   }) {
 
@@ -101,11 +103,11 @@ export function AreaChartInteractive({
         <Button 
             variant="outline" 
             onClick={fetchVMStats}
-            disabled={!chartData}
+            disabled={!isselected}
           >
               <RotateCw />
           </Button>
-        <Select value={timeRange} onValueChange={setTimeRange}>
+        <Select value={timeRange} onValueChange={setTimeRange} disabled={!isselected}>
           <SelectTrigger
             className="w-[160px] rounded-lg sm:ml-auto"
             aria-label="Select a value"
@@ -130,7 +132,10 @@ export function AreaChartInteractive({
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
         >
-          <AreaChart data={filteredData}>
+          
+          {isselected ? 
+          (
+            <AreaChart data={filteredData}>
             <defs>
             <linearGradient id="fillCpu" x1="0" y1="0" x2="0" y2="1">
               <stop
@@ -178,6 +183,7 @@ export function AreaChartInteractive({
             />
             <Area
               dataKey="memory"
+              strokeWidth={1.5}
               type="natural"
               fill="url(#ffff)"
               stroke="var(--color-memory)"
@@ -185,6 +191,7 @@ export function AreaChartInteractive({
             />
             <Area
               dataKey="cpu"
+              strokeWidth={1.5}
               type="natural"
               fill="url(#ffff)"
               stroke="var(--color-cpu)"
@@ -192,6 +199,14 @@ export function AreaChartInteractive({
             />
             <ChartLegend content={<ChartLegendContent />} />
           </AreaChart>
+          ) : (
+            <div className="col-span-3 flex justify-center items-center h-full">
+              <p className="p-2 text-sm align-middle h-24 py-10 text-center text-muted-foreground">
+                No Virtual Machine selected
+              </p>
+            </div>
+          )
+        }
         </ChartContainer>
       </CardContent>
     </Card>

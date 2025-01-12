@@ -115,6 +115,16 @@ export default function NetworkingContent({
       <CardContent className="px-2 pt-4 sm:px-3 sm:pt-2">
           <>
             <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px] font-semibold">Protocol</TableHead>
+                <TableHead className="font-semibold">Status</TableHead>
+                <TableHead className="font-semibold">Uptime</TableHead>
+                <TableHead className="font-semibold">Public Hostname</TableHead>
+                <TableHead className="text-start font-semibold">Internal Service</TableHead>
+                <TableHead className="text-center font-semibold">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
             <TableBody>
             {loading ? (
               <TableRow>

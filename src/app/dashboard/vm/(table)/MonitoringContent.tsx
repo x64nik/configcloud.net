@@ -11,10 +11,12 @@ import { Button } from "@/components/ui/button";
 
 const MonitoringContent = ({ selectedVM }: { selectedVM: VirtualMachine | undefined }) => {
   const [statsData, setStatsData] = useState<any[]>([]);
+  const [isVmSelected, setisVmSelecte] = useState(false) 
   const [currentvm, setCurrentVM] = useState<string | null>(null)
 
   const fetchVMStats = async () => {
     if (!selectedVM?.vm_id) {
+      setisVmSelecte(false)
       setStatsData([])
       return;
     }
@@ -24,6 +26,7 @@ const MonitoringContent = ({ selectedVM }: { selectedVM: VirtualMachine | undefi
       setStatsData(response.data);
       console.log(statsData)
       setCurrentVM(selectedVM.vm_id)
+      setisVmSelecte(true)
     } catch (err) {
       toast.error(`Failed to fetch stats: ${err}`);
     } finally {
@@ -36,7 +39,7 @@ const MonitoringContent = ({ selectedVM }: { selectedVM: VirtualMachine | undefi
 
   return (
     <div className="grid grid-cols-1 gap-2">
-      <AreaChartInteractive chartData={statsData} fetchVMStats={fetchVMStats}/>
+      <AreaChartInteractive isselected={isVmSelected} chartData={statsData} fetchVMStats={fetchVMStats}/>
     </div>
   );
 };
