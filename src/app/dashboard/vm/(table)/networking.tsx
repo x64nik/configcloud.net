@@ -162,6 +162,7 @@ export default function NetworkingContent({
                           open={confirmDialogOpen}
                           onClose={() => setConfirmDialogOpen(false)}
                           onConfirm={() => handelDeleteNetRules(selectedVM.vm_id, netrule.subdomain)}
+                          title="Delete SSH Key"
                           message="Are you sure you want to delete this SSH key?"
                         />
                         <DropdownMenu>

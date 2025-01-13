@@ -222,6 +222,7 @@ const columns: ColumnDef<VirtualMachine>[] = [
               open={confirmDialogOpen}
               onClose={() => setConfirmDialogOpen(false)}
               onConfirm={() => DeleteVM(vmToDelete!)} // Pass the VM id on confirm
+              title="Destroy VM!"
               message="Are you sure you want to delete this VM?"
             />
             <Button

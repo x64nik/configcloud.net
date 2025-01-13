@@ -1,10 +1,9 @@
-// app/dashboard/vm/page.tsx
-export default function HelpPage() {
-    return (
-      <div className="p-4">
-        <h1 className="text-xl font-semibold">Help</h1>
-        <p>Help & Support Centre</p>
-      </div>
-    );
-  }
-  
+import { HelpAndSupport } from "./healp-and-support";
+
+export default function HealpPage() {
+  return (
+    <div className="container mx-auto py-10">
+      <HelpAndSupport />
+    </div>
+  )
+}

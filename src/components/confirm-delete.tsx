@@ -8,13 +8,14 @@ interface ConfirmationDialogProps {
   onClose: () => void;
   onConfirm: () => void;
   message: string;
+  title: string;
 }
 
-export function ConfirmationDialog({ open, onClose, onConfirm, message }: ConfirmationDialogProps) {
+export function ConfirmationDialog({ open, onClose, onConfirm, message, title }: ConfirmationDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent>
-      <DialogTitle>Delete SSH Key!</DialogTitle>
+      <DialogTitle>{title}</DialogTitle>
         <p>{message}</p>
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>

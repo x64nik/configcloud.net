@@ -105,6 +105,7 @@ export function SshKeyManager() {
                   open={confirmDialogOpen}
                   onClose={() => setConfirmDialogOpen(false)}
                   onConfirm={() => handelDeleteSSHKey(keyToDelete!)}
+                  title="Delete SSH Key!"
                   message="Are you sure you want to delete this SSH key?"
                 />
                 <DropdownMenu>
