@@ -112,14 +112,13 @@ export default function NetworkingContent({
           </Button> 
       </CardHeader>  
       
-      <CardContent className="px-2 pt-4 sm:px-3 sm:pt-2">
+      <CardContent className="px-2 pt-4 sm:px-8 sm:pt-2">
           <>
             <Table>
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[100px] font-semibold">Protocol</TableHead>
-                <TableHead className="font-semibold">Status</TableHead>
-                <TableHead className="font-semibold">Uptime</TableHead>
+                <TableHead className="font-semibold">TLS</TableHead>
                 <TableHead className="font-semibold">Public Hostname</TableHead>
                 <TableHead className="text-start font-semibold">Internal Service</TableHead>
                 <TableHead className="text-center font-semibold">Actions</TableHead>
@@ -138,12 +137,11 @@ export default function NetworkingContent({
             ) : selectedVM ? (
               Array.isArray(allnetrules) && allnetrules.filter((netrule) => netrule.vm_id === selectedVM.vm_id).length ? (
                 allnetrules
-                  .filter((netrule) => netrule.vm_id === selectedVM.vm_id) // Filter rules for the selected VM
+                  .filter((netrule) => netrule.vm_id === selectedVM.vm_id) // Filter rules for the selected VM tls enable
                   .map((netrule: any) => (
                     <TableRow key={netrule?.subdomain}>
                       <TableCell className="font-medium">{netrule?.protocol.toLocaleUpperCase()}</TableCell>
-                      <TableCell>{netrule?.protocol}</TableCell>
-                      <TableCell>{netrule?.protocol}</TableCell>
+                      <TableCell>ENABLED</TableCell>
                       <TableCell>
                         <a
                           href={netrule?.protocol + "://" + netrule?.svc_public_domain}
@@ -162,8 +160,8 @@ export default function NetworkingContent({
                           open={confirmDialogOpen}
                           onClose={() => setConfirmDialogOpen(false)}
                           onConfirm={() => handelDeleteNetRules(selectedVM.vm_id, netrule.subdomain)}
-                          title="Delete SSH Key"
-                          message="Are you sure you want to delete this SSH key?"
+                          title="Delete rule!"
+                          message="Are you sure you want to delete this subdomain rule?"
                         />
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>

@@ -90,7 +90,8 @@ export default function Page() {
 
   return (
     <div className="h-full flex-1 flex-col space-y-2 p-8 md:flex">
-      <div className="overflow-x-auto">
+      <h1 className="text-xl font-semibold tracking-tight">Virtual Machines Dashboard</h1>
+      <div className="overflow-x-auto py-4">
       <DataTable data={mergedVMData} columns={columns} fetchVMData={fetchVMData} loading={loading} error={error}/>
       </div>
       <Separator className="my-3" />
