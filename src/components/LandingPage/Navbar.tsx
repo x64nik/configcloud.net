@@ -34,30 +34,17 @@ function Navbar() {
 
   return (
     <header
-      className={`fixed top-6 left-6 right-6 z-50 w-auto h-16 rounded-lg transition-all ease-in-out duration-300 
-        ${scrolled ? 'border shadow-2xl backdrop-blur-lg' : ''} 
-        bg-black bg-opacity-30`}
-      style={{
-        // Water ripple effect when not scrolled
-        // backgroundImage: scrolled ? 'none' : 'url(/water-ripple.png)', 
-        backgroundSize: scrolled ? 'none' : 'cover',
-        backgroundPosition: scrolled ? 'none' : 'center', 
-        
-        // Gradient background when scrolled
-        background: scrolled 
-          ? 'linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.4))'
-          : 'none',
-      }}
+      className={`fixed top-6 left-6 right-6 z-50 w-auto h-16 rounded-lg transition-all ease-in-out duration-300 bg-black bg-opacity-0`}
     >
       <div className="container max-w-full flex h-full items-center justify-between px-6">
-        <div className="flex items-center space-x-4">
+        {/* <div className="flex items-center space-x-4">
           <Link href="#" className="flex items-center space-x-2">
             <svg height="26" viewBox="0 0 235 203" fill="white">
             <path d="M117.551.058L234.484 202.10H.618L117.551.058Z" />
             </svg>
           </Link>
-        </div>
-        <div className="flex ml-14 gap-3">
+        </div> */}
+        {/* <div className="flex ml-14 gap-3">
           <Button variant={'outline'} className='rounded-full'>
             <Link
               href="#preview"
@@ -67,8 +54,8 @@ function Navbar() {
             </Link>
           </Button>
           <Button variant={'outline'} className='rounded-full '>
-            <Link href="#pricing" className="text-sm text-white hover:text-gray-300">
-              Pricing
+            <Link href="#services" className="text-sm text-white hover:text-gray-300">
+              Services
             </Link>
           </Button>
           <Button variant={'outline'} className='rounded-full '>
@@ -76,10 +63,10 @@ function Navbar() {
               href="#contact"
               className="text-sm text-white hover:text-gray-300"
             >
-              Contact
+              Working
             </Link>
           </Button>
-        </div>
+        </div> */}
         <div className="flex items-center gap-4 ml-auto">
         <Link href={"/login"}>
           <Button

@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export function FeatureSection() {
   return (
-    <div className="flex flex-col overflow-hidden">
+    <div id="preview" className="flex flex-col overflow-hidden">
       <ContainerScroll
         titleComponent={<></>}
       >

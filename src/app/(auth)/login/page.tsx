@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,6 @@ import GoogleIcon from "@/components/icons/GoogleIcon";
 export default function LoginPage() {
     const router = useRouter();
     const [loading, setLoading] = React.useState(false);
-
     const [user, setUser] = React.useState({
       email: "",
       password: "",
@@ -34,10 +33,10 @@ export default function LoginPage() {
         toast.success("Login Success");
         router.push("/dashboard/vm");
  
-      } catch (error) {
+      } catch (error: any) {
 
           console.log("Login Failed", error);
-          toast.error(`${error}` || "An error occurred during Login.");
+          toast.error(`${error.message}`);
         
         } finally {
           setLoading(false);

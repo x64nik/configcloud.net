@@ -12,7 +12,7 @@ export const ContainerScroll = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["-0.9", "0.2"], // Adjust this value to start earlier or later
+    offset: ["0", "0"], // Adjust this value to start earlier or later
   });
   const [isMobile, setIsMobile] = React.useState(false);
 
@@ -28,16 +28,16 @@ export const ContainerScroll = ({
   }, []);
 
   const scaleDimensions = () => {
-    return isMobile ? [0.7, 0.9] : [0.9, 0.8];
+    return isMobile ? [0.7, 0.9] : [0.9, 1];
   };
 
-  const rotate = useTransform(scrollYProgress, [0, 0.5], [20, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], scaleDimensions());
-  const translate = useTransform(scrollYProgress, [0, 0.5], [0, -100]);
+  const rotate = useTransform(scrollYProgress, [0, 0], [0, 0]);
+  const scale = useTransform(scrollYProgress, [0, 10], scaleDimensions());
+  const translate = useTransform(scrollYProgress, [0, 0.5], [0, 0]);
 
   return (
     <div
-      className="h-[60rem] md:h-[40rem] flex items-center justify-center relative p-2 md:p-20"
+      className="h-[60rem] md:h-[48rem] flex items-center justify-center relative p-2 md:p-20"
       ref={containerRef}
     >
       <div
@@ -86,7 +86,7 @@ export const Card = ({
         boxShadow:
           "0 0 #0000004d, 0 9px 20px #0000004a, 0 37px 37px #00000042, 0 84px 50px #00000026, 0 149px 60px #0000000a, 0 233px 65px #00000003",
       }}
-      className="max-w-fit -mt-12 mx-auto h-full md:h-full w-full border-2 border-[#6a6a6a] p-2 md:p-2 bg-[#272727] rounded-[30px] shadow-2xl"
+      className="max-w-fit -mt-12 mx-auto h-full md:h-full w-full p-2 md:p-4 border-2 border-[#6a6a6a] bg-[#252525] rounded-[30px] shadow-2xl"
     > 
       
       <div className=" h-fit w-fit  overflow-hidden rounded-2xl bg-gray-100 dark:bg-zinc-900 md:rounded-2xl md:p-2">

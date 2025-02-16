@@ -21,22 +21,22 @@ export function Footer() {
             <div>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link href="/pricing" className="hover:text-white transition-colors">
+                  <Link href="/#" className="hover:text-white transition-colors">
                     Pricing
                   </Link>
                 </li>
                 <li>
-                  <Link href="/blog" className="hover:text-white transition-colors">
+                  <Link href="/#" className="hover:text-white transition-colors">
                     Blogs
                   </Link>
                 </li>
                 <li>
-                  <Link href="/showcase" className="hover:text-white transition-colors">
+                  <Link href="/#" className="hover:text-white transition-colors">
                   Documentation
                   </Link>
                 </li>
                 <li>
-                  <Link href="/showcase" className="hover:text-white transition-colors">
+                  <Link href="/#" className="hover:text-white transition-colors">
                     Contact
                   </Link>
                 </li>
@@ -48,7 +48,7 @@ export function Footer() {
                 <ul className="space-y-2 text-sm">
                 <li>
                 <Link
-                    href="/linkedin"
+                    href="https://www.linkedin.com/in/rushikesh-darunte-758565226/"
                     className="hover:text-white transition-colors flex items-center space-x-2"
                 >
                     <LinkedInLogoIcon className="w-5 h-5" /> {/* Adjust icon size */}
@@ -57,7 +57,7 @@ export function Footer() {
                 </li>
                 <li>
                 <Link
-                    href="/twitter"
+                    href="https://x.com/x64Rushi"
                     className="hover:text-white transition-colors flex items-center space-x-2"
                 >
                     <TwitterLogoIcon className="w-5 h-5" /> {/* Adjust icon size */}
