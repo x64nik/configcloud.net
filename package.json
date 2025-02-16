@@ -34,6 +34,7 @@
     "@tsparticles/engine": "^3.7.1",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.7.1",
+    "@vercel/analytics": "^1.5.0",
     "axios": "^1.7.7",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
