@@ -14,8 +14,6 @@ import {
 import { Checkbox } from "@/components/ui/checkbox"
 import { vmDelete, vmState } from "@/api/vmActions"
 import { toast } from "sonner"
-import VSCodeButton from "@/components/vs-code-icon"
-import VSCodeIcon from "@/components/vs-code-icon"
 import { ConfirmationDialog } from "@/components/confirm-delete"
 import { useState } from "react"
 
@@ -125,6 +123,14 @@ const columns: ColumnDef<VirtualMachine>[] = [
   {
     accessorKey: "distro",
     header: "Operating System",
+    cell: ({ row }) => {
+      const distro = row.getValue("distro") as string;
+      const osVersion = row.original.os_version as string; // Access `os_version`
+      const formattedDistro = distro.charAt(0).toUpperCase() + distro.slice(1);
+      return (
+        <span>{formattedDistro} {osVersion}</span> 
+      );
+    },
   },
   {
     accessorKey: "status",
@@ -168,6 +174,17 @@ const columns: ColumnDef<VirtualMachine>[] = [
           <ChevronsUpDown/>
         </Button>
       )
+    },
+    cell: ({ row }) => {
+      const formattedDate = new Date(row.getValue("creation_date")).toLocaleString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      });
+      return <span>{formattedDate}</span>;
     },
   },
   {

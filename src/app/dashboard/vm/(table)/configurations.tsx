@@ -83,7 +83,7 @@ export default function ConfigurationsContent({
                 /> */}
                 <InfoRow
                   label="Operating System"
-                  value={`${getValueOrDash(selectedVM?.distro)}-${getValueOrDash(selectedVM?.os_version)}`}
+                  value={`${getValueOrDash(selectedVM?.distro)} ${getValueOrDash(selectedVM?.os_version)}`}
                 />
                 <InfoRow
                   label="Kernel Version"
