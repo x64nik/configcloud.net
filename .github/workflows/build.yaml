@@ -10,7 +10,7 @@ jobs:
     with:
       image_name: "cc-dashboard-service"
       image_tag: "latest"
-      build_args: '{"MY_ENV_VAR": "https://api.configcloud.net"}'
+      build_args: NEXT_PUBLIC_API_BASE_URL=https://api.configcloud.net
     secrets:
       DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
       DOCKER_HUB_ACCESS_TOKEN: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
