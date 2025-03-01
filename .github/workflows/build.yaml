@@ -1,0 +1,16 @@
+name: Build and Push using Shared Workflow
+
+on:
+  push:
+    branches:
+      - dev
+jobs:
+  build:
+    uses: x64nik/action-templates/.github/workflows/dockerhub-build-push.yaml@main
+    with:
+      image_name: "cc-dashboard-service"
+      image_tag: "latest"
+      build_args: '{"MY_ENV_VAR": "https://api.configcloud.net"}'
+    secrets:
+      DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+      DOCKER_HUB_ACCESS_TOKEN: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
