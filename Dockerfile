@@ -4,7 +4,8 @@ COPY package.json package-lock.json ./
 RUN npm i
 COPY . .
 
-RUN printf "$DEV_ENV" >> .env
+ARG NEXT_PUBLIC_API_BASE_URL
+RUN printf "NEXT_PUBLIC_API_BASE_URL=%s\n" "$NEXT_PUBLIC_API_BASE_URL" > .env
 RUN npm run build
 
 FROM node:18-alpine AS runner
